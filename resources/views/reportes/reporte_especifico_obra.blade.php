@@ -197,8 +197,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                             <th >Articulo </th>
                             <th >Numero serie</th>
                             <th >Unidad</th>
-                            <th >Cantidad</th>
-                            <th >Material Asignados</th>
+                            <th >Cantidad </th>
                             <th >Descripcion</th>
                             <th >Observaciones</th>
 
@@ -214,7 +213,6 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                 <td >{{$item->numero_serie}}</td>
                 <td >{{$item->unidad}}</td>
                 <td>{{$item->cantidad}}</td>
-                <td>{{$item->asignados}}</td>
                 <td>{{$item->descripcion}}</td>
                 <td>{{$item->observacion}}</td>
 
@@ -277,7 +275,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
           pageLength: 4,
           searchPanes: {
               viewTotal: true,
-              columns: [0,1,2,3,4,5,6,7,8]
+              columns: [0,1,2,3,5,7,8]
           },
         scrollY:        "320px",
        scrollX:        true,
@@ -347,14 +345,26 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
               ],
             },  
           columnDefs: [ 
+          
             {
-                target: 5,
-                visible: false,
-                searchable: false,
-                width : 0,
-                
-            },
-           
+                        searchPanes: {
+                            options: [{
+                                    label: 'Sin Asignar',
+                                    value: function(rowData, rowIdx) {
+                                        return rowData[3] == '';
+                                    }
+                                },
+                                {
+                                    label: 'Asignados',
+                                    value: function(rowData, rowIdx) {
+                                        return rowData[3] !== '';
+                                    }
+                                }
+                            ],
+                            combiner: 'and'
+                        },
+                        targets: [7]
+                    },
              
            
           ],

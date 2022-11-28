@@ -421,7 +421,7 @@ console.log(mindias);
       pageLength: 4,
       searchPanes: {
           viewTotal: true,
-          columns: [0,1,2,3,4,5,6]
+          columns: [6]
       },
     scrollY:        "320px",
    scrollX:        true,
@@ -492,7 +492,31 @@ console.log(mindias);
         },  
       columnDefs: [ 
       
-        
+        {
+                        searchPanes: {
+                            options: [{
+                                    label: ' menores a 30 dias',
+                                    value: function(rowData, rowIdx) {
+                                        return rowData[6] < 30;
+                                    }
+                                },
+                                {
+                                    label: '30 a 60 dias',
+                                    value: function(rowData, rowIdx) {
+                                        return rowData[6] >= 30 && rowData[7] <= 60;
+                                    }
+                                },
+                                {
+                                    label: 'mayor 60 dias',
+                                    value: function(rowData, rowIdx) {
+                                        return rowData[6] >=60;
+                                    }
+                                }
+                            ],
+                            combiner: 'and'
+                        },
+                        targets: [6]
+                    }, 
        
       ],
     

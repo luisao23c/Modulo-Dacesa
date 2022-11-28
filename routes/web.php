@@ -18,10 +18,10 @@ use App\Http\Controllers\Login;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
 
     return view('login.login');
-
 })->name('start');
 Route::post('/add_herramienta_excel', [Reportes::class, 'add_herramienta_excel'])->name('add_herramienta_excel');
 
@@ -31,8 +31,8 @@ Route::get('/altas_bajas', function () {
     $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
     $herramientas_select =  array();
     foreach ($herramientas as $key => $value) {
-     array_push($herramientas_select, $value->nombre);
-   }
+        array_push($herramientas_select, $value->nombre);
+    }
     return view('altas_bajas.herramientas')->with(compact('herramientas_select'))->with(compact('herramientas'));
 })->name('altas_bajas');
 Route::get('/devolucion', function () {
@@ -48,7 +48,6 @@ Route::get('/asignacion', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/addsupervisor', [Users::class, 'addsupervisor'])->name('adds');
 Route::post('/addempleado', [Users::class, 'addempleado'])->name('addemp');
-Route::post('/addherramienta_user', [CrudHerramientas::class, 'addherramienta_user'])->name('addherramienta_user');
 
 Route::get('/getvales', [Users::class, 'viewvales'])->name('getvales');
 Route::post('/nuevovaleobra/{obra}', [Users::class, 'nuevovaleobra'])->name('nuevovaleobra');
@@ -59,28 +58,33 @@ Route::get('/vistavale/{sup}/{id_obra}/{caja?}/{alert?}', [Users::class, 'vistav
 Route::post('/addobra', [CrudObras::class, 'addobra'])->name('addobra');
 Route::get('/asignacionxusuario/{id_usuario?}/{supervisor?}/{empleado?}/{empleadoname?}/{obra?}/{alert?}', [Users::class, 'asignacionxusuario'])->name('asignacionxusuario');
 Route::post('/vistadeusuario', [Users::class, 'vistadeusuario'])->name('vistadeusuario');
+
+Route::post('/eliminar_user_obra', [CrudObras::class, 'eliminar_user_obra'])->name('eliminar_user_obra');
+Route::post('/nuevo_user_obra', [CrudObras::class, 'nuevo_user_obra'])->name('nuevo_user_obra');
+Route::post('/login', [Login::class, 'login'])->name('login');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/Cerrarsesion', [Login::class, 'Cerrarsesion'])->name('Cerrarsesion');
+
+//-------------------------------------Herramientas------------------------------------------------------
+Route::post('/reparacion', [CrudHerramientas::class, 'reparacion'])->name('reparacion');
+Route::post('/almacen', [CrudHerramientas::class, 'almacen'])->name('almacen');
 Route::post('/addherramienta', [CrudHerramientas::class, 'addherramienta'])->name('addherramienta');
 Route::post('/bajaherramienta', [CrudHerramientas::class, 'bajaherramienta'])->name('bajaherramienta');
 Route::get('/get_herramientas_user/{id}', [CrudHerramientas::class, 'get_herramientas_user'])->name('get_herramientas_user');
 Route::post('/delete_herramientas_user', [CrudHerramientas::class, 'delete_herramientas_user'])->name('delete_herramientas_user');
 Route::post('/eliminar_peticion_herramienta', [CrudHerramientas::class, 'eliminar_peticion_herramienta'])->name('eliminar_peticion_herramienta');
-Route::post('/eliminar_user_obra', [CrudObras::class, 'eliminar_user_obra'])->name('eliminar_user_obra');
-Route::post('/nuevo_user_obra', [CrudObras::class, 'nuevo_user_obra'])->name('nuevo_user_obra');
+
 Route::get('/solicitud/{id?}', [CrudHerramientas::class, 'solicitud'])->name('solicitud');
 Route::post('/asignar_herramienta', [CrudHerramientas::class, 'asignar_herramienta'])->name('asignar_herramienta');
 Route::post('/reasignar_herramienta', [CrudHerramientas::class, 'reasignar_herramienta'])->name('reasignar_herramienta');
-Route::post('/login', [Login::class, 'login'])->name('login');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/Cerrarsesion', [Login::class, 'Cerrarsesion'])->name('Cerrarsesion');
 Route::post('/add_caja', [CrudHerramientas::class, 'add_caja'])->name('add_caja');
 
-//------------------------------------- REPORTES----------------------------------------------------------------
+//-------------------------------------REPORTES------------------------------------------------------
 Route::get('/reporte_trabajador', [Reportes::class, 'reporte_trabajador'])->name('reporte_trabajador');
 Route::get('/reportes_supervisor/{id_obra}', function ($id_obra) {
     $obra = DB::select('select obra,cliente from obras where obras.id = ?', [$id_obra]);
-    $reporte_supervisor = DB::select('select users.name as empleado,herramientas.nombre as herramienta,user_herramientas.cantidad as asignados,user_herramientas.asignados as material_faltante,user_herramientas.descripcion FROM user_herramientas INNER join users on user_herramientas.user = users.id left JOIN herramientas on herramientas.id = user_herramientas.herramienta WHERE user_herramientas.obra = ? and user_herramientas.descripcion is not null ORDER by users.name;',[$id_obra]);
-    foreach ( $obra as $value)
-    {
+    $reporte_supervisor = DB::select('select users.name as empleado,herramientas.nombre as herramienta,user_herramientas.cantidad as asignados,user_herramientas.asignados as material_faltante,user_herramientas.descripcion FROM user_herramientas INNER join users on user_herramientas.user = users.id left JOIN herramientas on herramientas.id = user_herramientas.herramienta WHERE user_herramientas.obra = ? and user_herramientas.descripcion is not null ORDER by users.name;', [$id_obra]);
+    foreach ($obra as $value) {
         $obra = $value->obra;
         $cliente = $value->cliente;
     }

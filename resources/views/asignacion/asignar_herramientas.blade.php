@@ -200,20 +200,15 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                       <td>{{$items->cantidad}}</td>
                       <td>{{$items->descripcion}}</td>
                       <td>
-                        <div class="mb-3">
-                            <form action="{{ route('asignar_herramienta') }}" method="POST">
+                            <form id="asignar_herramienta">
                                 @csrf
-        
-                            <select class="form-select" name="herramienta">
-                              @if ($herramientas)
+                            <select class="form-select"id="herramienta{{$partida}}" name="herramienta">
                     
                                 @foreach ($herramientas as $item)
                                 <option selected value="{{$item->id}}"> {{$item->nombre}} / {{$item->numero_serie}} / {{$item->unidad}}   </option>
                     
                                 @endforeach
-                          @endif
                             </select>
-                          </div>
         
                       </td>
                         <input id="id" name="user" type="hidden" value="{{$user}}">
@@ -221,7 +216,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                         <input id="id" name="cantidad" type="hidden" value="{{$items->cantidad}}">
         
                       <td><input type="number" name="faltan" id=""></td>
-                      <td><button class="btn btn-1">
+                      <td><button data-id="{{$partida}}"  type="button" onclick="asignar_herramienta(this); return true;" class="btn btn-1">
                       
         
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
@@ -380,7 +375,7 @@ $(document).ready(function () {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
-    
+    <script src="{{ asset("peticiones/asignacion.js") }}"></script>
     
   </body>
 </html>

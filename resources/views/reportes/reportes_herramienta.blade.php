@@ -197,20 +197,43 @@ div.dataTables_wrapper div.dataTables_length select {
                     </thead>
                     <tbody class=" align-middle">
     @foreach($herramientas as $item)
+  
               <tr>
                 <td></td>
                 <td>{{$item->nombre}}</td>
                 <td>{{$item->numero_serie}}</td>
                 <td>{{$item->unidad}}</td>
                 <td>{{$item->estado}}</td>
-                <td><form  action="{{ route('reporte_vida_herramienta') }}"  method="POST" name="sample">
-                  @csrf
-                  <input type="hidden" name="id" value="{{$item->id}}">
-                <button type="submit" class=" custom-icon btn-1 " style=""> 
-                  <img  width="30" height="30"  src="https://images.vexels.com/media/users/3/158744/isolated/preview/17f0e622c52dbedf3da254361f5b4e3b-reporte-de-ilustraci--n-by-vexels.png" alt="reportes">
+                <td>
+                  <div class="row">
+                  <div class="col-4">
+                    @if($item->estado == 3)
+                    <form  action="{{ route('almacen') }}"  method="POST" name="">
+                      @csrf
+                      <input type="hidden" name="id" value="{{$item->id}}">
+                    <button type="submit" class="btn btn-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z"/>
+                      </svg>  
+                    </button>
+                  </form>
 
-                </button>
-                </form>
+                    @endif
+                  </div>
+                  <div class=" offset-1 col-4">
+                    <form  action="{{ route('reporte_vida_herramienta') }}"  method="POST" name="sample">
+                      @csrf
+                      <input type="hidden" name="id" value="{{$item->id}}">
+                    <button type="submit" class=" custom-icon btn-1 " style=""> 
+                      <img  width="30" height="30"  src="https://images.vexels.com/media/users/3/158744/isolated/preview/17f0e622c52dbedf3da254361f5b4e3b-reporte-de-ilustraci--n-by-vexels.png" alt="reportes">
+    
+                    </button>
+                    </form>
+                  </div>
+                </div>
+                 
+                  
+                 
               </td>
               </tr>
               
@@ -391,5 +414,6 @@ $(document).ready(function() {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
-</body>
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+  </body>
 </html>
