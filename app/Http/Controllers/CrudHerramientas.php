@@ -133,6 +133,7 @@ class CrudHerramientas extends Controller
       $solicitud = DB::select('select users.id,user_herramientas.id,descripcion,cantidad,asignados,users.name FROM user_herramientas INNER JOIN users on user_herramientas.user = users.id WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.user= ? and  user_herramientas.herramienta IS  NULL  and  user_herramientas.reporte  IS  NULL', [$request->id]);
       $solicitud_faltante = DB::select('select users.id,user_herramientas.id,herramientas.id AS herramienta,descripcion,cantidad,asignados,users.name,herramientas.nombre,herramientas.numero_serie,herramientas.unidad FROM user_herramientas INNER JOIN users on user_herramientas.user = users.id INNER JOIN herramientas on user_herramientas.herramienta = herramientas.id WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.user= ? and  user_herramientas.asignados IS NOT NULL  and  user_herramientas.reporte  IS  NULL', [$request->id]);
     }
+
     $name = "";
     $name_faltante = "";
     $id = 0;
@@ -152,6 +153,7 @@ class CrudHerramientas extends Controller
   }
   public function asignar_herramienta(Request $request)
   {
+
     $herramienta = User_herramientas::find($request->id);
     if ($request->faltan) {
       if ($request->cantidad - $request->faltan > 0) {
@@ -168,14 +170,19 @@ class CrudHerramientas extends Controller
     } else {
       $herramienta->asignados = NULL;
       $herramienta->herramienta = $request->herramienta;
-      $herramienta->update();
+     $herramienta->update();
       $herramienta_table = herramientas::find($request->herramienta);
 
       $herramienta_table->estado = 2;
-      $herramienta_table->update();
+   $herramienta_table->update();
     }
-
-    return redirect()->route('solicitud', [$request->user]);
+    $solicitud = DB::select('select users.id,user_herramientas.id,descripcion,cantidad,asignados,users.name FROM user_herramientas INNER JOIN users on user_herramientas.user = users.id WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.user= ? and  user_herramientas.herramienta IS  NULL  and  user_herramientas.reporte  IS  NULL', [$request->user]);
+    $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
+     $user =["user" => $request->user];
+     $usuario = array();
+     array_push($usuario,$user);
+    
+    return json_encode([$solicitud, $herramientas,$usuario]);
   }
   public function reasignar_herramienta(Request $request)
   {
@@ -189,7 +196,7 @@ class CrudHerramientas extends Controller
       $herramienta->update();
       $herramienta_table = herramientas::find($request->herramienta);
       $herramienta_table->estado = 2;
-      $herramienta_table->update();
+       $herramienta_table->update();
     } else if ($request->cantidad - $request->faltan == 0) {
       $asignados_pasados = $herramienta->asignados + $request->faltan;
       $herramienta->cantidad = $asignados_pasados;
@@ -197,10 +204,16 @@ class CrudHerramientas extends Controller
       $herramienta->update();
       $herramienta_table = herramientas::find($request->herramienta);
       $herramienta_table->estado = 2;
-      $herramienta_table->update();
+       $herramienta_table->update();
     }
 
-    return redirect()->route('solicitud', [$request->user]);
+     $solicitud_faltante = DB::select('select users.id,user_herramientas.id,herramientas.id AS herramienta,descripcion,cantidad,asignados,users.name,herramientas.nombre,herramientas.numero_serie,herramientas.unidad FROM user_herramientas INNER JOIN users on user_herramientas.user = users.id INNER JOIN herramientas on user_herramientas.herramienta = herramientas.id WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.user= ? and  user_herramientas.asignados IS NOT NULL  and  user_herramientas.reporte  IS  NULL', [$request->user]);
+    $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
+     $user =["user" => $request->user];
+     $usuario = array();
+     array_push($usuario,$user);
+    
+    return json_encode([$solicitud_faltante, $herramientas,$usuario]);
   }
   public function reparacion(Request $request){
     $herramienta = herramientas::find($request->id);

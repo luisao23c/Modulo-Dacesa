@@ -64,6 +64,7 @@ Route::post('/nuevo_user_obra', [CrudObras::class, 'nuevo_user_obra'])->name('nu
 Route::post('/login', [Login::class, 'login'])->name('login');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/Cerrarsesion', [Login::class, 'Cerrarsesion'])->name('Cerrarsesion');
+Route::post('/addherramienta_user', [CrudHerramientas::class, 'addherramienta_user'])->name('addherramienta_user');
 
 //-------------------------------------Herramientas------------------------------------------------------
 Route::post('/reparacion', [CrudHerramientas::class, 'reparacion'])->name('reparacion');

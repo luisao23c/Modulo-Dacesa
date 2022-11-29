@@ -184,7 +184,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
         </tr>
                 </thead>
                 
-                 <tbody>
+                 <tbody id="cuerpo">
                   @php $partida = 1 @endphp
                     <br>
                   @foreach ($solicitud as $items)
@@ -211,12 +211,12 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                             </select>
         
                       </td>
-                        <input id="id" name="user" type="hidden" value="{{$user}}">
-                        <input id="id" name="id" type="hidden" value="{{$items->id}}">
-                        <input id="id" name="cantidad" type="hidden" value="{{$items->cantidad}}">
+                        <input id="user{{$partida}}" name="user" type="hidden" value="{{$user}}">
+                        <input id="id{{$partida}}" name="id" type="hidden" value="{{$items->id}}">
+                        <input id="cantidad{{$partida}}" name="cantidad" type="hidden" value="{{$items->cantidad}}">
         
-                      <td><input type="number" name="faltan" id=""></td>
-                      <td><button data-id="{{$partida}}"  type="button" onclick="asignar_herramienta(this); return true;" class="btn btn-1">
+                      <td><input id="faltan{{$partida}}" type="number" name="faltan" id=""></td>
+                      <td><button data-id="{{$partida}}"  type="button" onclick="asignar_herramienta({{ $partida }});" class="btn btn-1">
                       
         
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
@@ -240,8 +240,8 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
   <div class="container shadow-lg p-3 mb-5 mt-5 bg-body rounded">
     
       <div class="row">
-          <div class="col">
-            <div class="table-responsive">
+          <div id="tabla_asignacion" class="col">
+            <div  class="table-responsive">
               <table id="myTable2" class="table table-bordered " >
                 <thead>
                 <th>Partida</th>
@@ -253,7 +253,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
           
                 </thead>
                 
-                 <tbody>
+                <tbody id="reasignacion">
                   @php $partida = 1 @endphp
                     <br>
                   @foreach ($solicitud_faltante as $items)
@@ -270,22 +270,20 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                       <td>{{$items->descripcion}}</td>
                       <td>
                         <div class="mb-3">
-                            <form action="{{ route('reasignar_herramienta') }}" method="POST">
-                                @csrf
-                                <input id="id" name="herramienta" type="hidden" value="{{$items->herramienta}}" >
+                            <form id="reasignar_herramienta">
+                                <input id="herramienta{{$partida}}" name="herramienta" type="hidden" value="{{$items->herramienta}}" >
                               <p>{{$items->nombre}} / {{$items->numero_serie}} / {{$items->unidad}} </p>
           
                           </div>
           
                       </td>
-                        <input id="id" name="user" type="hidden" value="{{$user}}">
-                        <input id="id" name="id" type="hidden" value="{{$items->id}}">
-                        <input id="id" name="cantidad" type="hidden" value="{{$items->cantidad}}">
+                        <input id="user{{$partida}}" name="user" type="hidden" value="{{$user}}">
+                        <input id="id{{$partida}}" name="id" type="hidden" value="{{$items->id}}">
+                        <input id="cantidad{{$partida}}" name="cantidad" type="hidden" value="{{$items->cantidad}}">
           
-                      <td><input type="number" name="faltan" id=""></td>
+                      <td><input id="faltan{{$partida}}" type="number" name="faltan" id=""></td>
                       <td>
-                        <button class="btn btn-1">
-                      
+                        <button data-id="{{$partida}}"  type="button" onclick="reasignacion({{ $partida }});" class="btn btn-1">                      
         
                           <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
