@@ -1,5 +1,7 @@
 
-
+function obtener_id(partida) {
+ localStorage.setItem('id', partida);
+}
   async function asignar_herramienta(partida) {
     let output = "";
     const herramienta = document.getElementById("herramienta" + partida).value;

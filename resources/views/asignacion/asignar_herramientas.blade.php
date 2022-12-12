@@ -219,7 +219,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
         
                       <td>
 
-                        <button data-id="{{ $partida }}"  id="agregar_herramienta" type="button" role="agregar_herramienta"
+                        <button data-id="{{ $partida }}"  id="agregar_herramienta" type="button" role="agregar_herramienta" onclick="obtener_id({{ $partida }});"
                         class="btn btn-1">
                       
         
@@ -337,9 +337,10 @@ $(document).ready(function () {
  var dt = $("#myTable").DataTable({
   initComplete: function () {
             $( document ).on("click", "button[role='agregar_herramienta']", function(){
-           id = document.getElementById('agregar_herramienta').parentNode;
-            
-           console.log(id);
+           id =  localStorage.getItem('id');
+           asignar_herramienta(id);
+           dt.draw(); 
+           
             });
         },
       language: {
