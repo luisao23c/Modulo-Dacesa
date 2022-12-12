@@ -151,7 +151,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
       <div class="row">
         <div class="col-2">
              <a href="{{ route('asignacion') }}">
-            <button type="button" class="btn btn-1">
+            <button  type="button" class="btn btn-1">
               <svg xmlns="http://www.w3.org/2000/svg" width="50" height="20" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
               </svg>
@@ -189,10 +189,10 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                     <br>
                   @foreach ($solicitud as $items)
                     @if ($items->asignados>0)
-                    <tr class="table-active">
+                    <tr  class="table-active">
                     @endif
                     @if ($items->asignados==0)
-                    <tr>
+                    <tr >
                     @endif
                  
         
@@ -216,7 +216,11 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                         <input id="cantidad{{$partida}}" name="cantidad" type="hidden" value="{{$items->cantidad}}">
         
                       <td><input id="faltan{{$partida}}" type="number" name="faltan" id=""></td>
-                      <td><button data-id="{{$partida}}"  type="button" onclick="asignar_herramienta({{ $partida }});" class="btn btn-1">
+        
+                      <td>
+
+                        <button data-id="{{ $partida }}"  id="agregar_herramienta" type="button" role="agregar_herramienta"
+                        class="btn btn-1">
                       
         
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
@@ -284,7 +288,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                       <td><input id="faltan{{$partida}}" type="number" name="faltan" id=""></td>
                       <td>
                         <button data-id="{{$partida}}"  type="button" onclick="reasignacion({{ $partida }});" class="btn btn-1">                      
-        
+                          
                           <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
                           </svg>
@@ -326,9 +330,18 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
 <!-- Para los estilos en Excel     -->
 <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js"></script>
+<script src="{{ asset("peticiones/asignacion.js") }}"></script>
+
 <script>
-$(document).ready(function () {
-    $("#myTable").DataTable({
+$(document).ready(function () { 
+ var dt = $("#myTable").DataTable({
+  initComplete: function () {
+            $( document ).on("click", "button[role='agregar_herramienta']", function(){
+           id = document.getElementById('agregar_herramienta').parentNode;
+            
+           console.log(id);
+            });
+        },
       language: {
             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
         },
@@ -345,7 +358,9 @@ $(document).ready(function () {
            
             buttons: [ 
             ]            
-        }            
+        }    
+      
+        
     });
 });
 $(document).ready(function () {
@@ -373,7 +388,6 @@ $(document).ready(function () {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
-    <script src="{{ asset("peticiones/asignacion.js") }}"></script>
     
   </body>
 </html>

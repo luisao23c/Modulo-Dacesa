@@ -1,5 +1,6 @@
 
-async function asignar_herramienta(partida) {
+
+  async function asignar_herramienta(partida) {
     let output = "";
     const herramienta = document.getElementById("herramienta" + partida).value;
     const user = document.getElementById("user" + partida).value;
@@ -103,8 +104,7 @@ async function reasignacion(partida) {
     });
     const data = await res.json();
     const table = document.getElementById("reasignacion");
-    console.log(object);
-    console.log(data);
+
     let output = "";
     const cont = 1;
     const solicitud = Array.from(data[0]);
@@ -158,13 +158,4 @@ async function reasignacion(partida) {
 
     table.innerHTML = output;
 }
-async function dibujar_asignacion(id){
-    const res = await fetch("solicitud " + id, {
-        method: "GET",
-        mode: "cors",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-    const data = await res.json();
-}
+
