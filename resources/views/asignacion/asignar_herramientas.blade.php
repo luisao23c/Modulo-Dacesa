@@ -217,7 +217,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
         
                       <td><input id="faltan{{$partida}}" type="number" name="faltan" id=""></td>
         
-                      <td>
+                      <td id="td{{ $partida }}">
 
                         <button data-id="{{ $partida }}"  id="agregar_herramienta" type="button" role="agregar_herramienta" onclick="obtener_id({{ $partida }});"
                         class="btn btn-1">
@@ -335,13 +335,13 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
 <script>
 $(document).ready(function () { 
  var dt = $("#myTable").DataTable({
+  
   initComplete: function () {
             $( document ).on("click", "button[role='agregar_herramienta']", function(){
            id =  localStorage.getItem('id');
-           asignar_herramienta(id);
-           dt.draw(); 
-           
-            });
+           console.log(id);
+        
+          });
         },
       language: {
             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -363,6 +363,11 @@ $(document).ready(function () {
       
         
     });
+       $(`#td${id}`).on("click", function(e) {
+           index = $(this).closest('tr').index();
+       dt.row( $(this)).remove().draw();
+       
+     });
 });
 $(document).ready(function () {
     $("#myTable2").DataTable({
@@ -384,6 +389,7 @@ $(document).ready(function () {
             ]            
         }            
     });
+    
 });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
