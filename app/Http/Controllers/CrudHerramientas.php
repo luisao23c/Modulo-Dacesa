@@ -207,9 +207,11 @@ class CrudHerramientas extends Controller
       $herramienta_table->estado = 2;
        $herramienta_table->update();
     } else if ($request->cantidad - $request->faltan == 0) {
+
       $asignados_pasados = $herramienta->asignados + $request->faltan;
       $herramienta->cantidad = $asignados_pasados;
       $herramienta->asignados = NULL;
+      
       $herramienta->update();
       $herramienta_table = herramientas::find($request->herramienta);
       $herramienta_table->estado = 2;
@@ -222,7 +224,6 @@ class CrudHerramientas extends Controller
      $usuario = array();
      array_push($usuario,$user);
     
-    return json_encode([$solicitud_faltante, $herramientas,$usuario]);
   }
   public function reparacion(Request $request){
     $herramienta = herramientas::find($request->id);
