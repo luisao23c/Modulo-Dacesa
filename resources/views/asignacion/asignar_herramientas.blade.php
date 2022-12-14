@@ -339,15 +339,15 @@ $(document).ready(function () {
   initComplete: function () {
             $( document ).on("click", "button[role='agregar_herramienta']", function(){
            id =  localStorage.getItem('id');
-           console.log(id);
-        
+           asignar_herramienta(id);
+           var data = dt.row( $(this).parents('tr') ).remove().draw();
           });
         },
       language: {
             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
         },
         pageLength: 2,
-     
+
      scrollY:        "400px",
      scrollX:        true,
      scrollCollapse: true,
@@ -363,11 +363,7 @@ $(document).ready(function () {
       
         
     });
-       $(`#td${id}`).on("click", function(e) {
-           index = $(this).closest('tr').index();
-       dt.row( $(this)).remove().draw();
-       
-     });
+     
 });
 $(document).ready(function () {
     $("#myTable2").DataTable({
