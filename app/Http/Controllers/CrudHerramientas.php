@@ -223,7 +223,7 @@ class CrudHerramientas extends Controller
      $user =["user" => $request->user];
      $usuario = array();
      array_push($usuario,$user);
-    
+     
   }
   public function reparacion(Request $request){
     $herramienta = herramientas::find($request->id);

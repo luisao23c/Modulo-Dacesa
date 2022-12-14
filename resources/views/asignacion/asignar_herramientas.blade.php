@@ -420,15 +420,16 @@
 
                         if(object.faltan == object.cantidad) {
                           dt.row($(this).parents('tr')).remove().draw();
+                        
                         }
                         else if(object.cantidad > object.faltan){
                           const total = object.cantidad - object.faltan;
                           temp[1] = total;
                           dt.row(idx).data(temp).draw();
+                       
 
                         }
-                        localStorage.removeItem('faltan');
-                        localStorage.removeItem('object');
+                       localStorage.clear();
 
                     });
                 },

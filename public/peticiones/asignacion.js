@@ -47,11 +47,8 @@ async function reasignacion(partida) {
       return alert("Debes agregar un valor");
       
     }
-    if( faltan > cantidad )  {
-
-      return alert("Se esta dado mas del lo que se pide");
-    }
-
+    console.log(faltan + " >" + cantidad);
+   
     const object = {
         id: ide,
         user: user,
@@ -60,7 +57,7 @@ async function reasignacion(partida) {
         herramienta: herramienta,
     };
     
-    const res = await fetch("asignar_herramienta", {
+    const res = await fetch("reasignar_herramienta", {
       method: "POST",
       mode: "cors",
       headers: {
@@ -70,5 +67,6 @@ async function reasignacion(partida) {
   });
    console.log(JSON.stringify(object));
    localStorage.setItem('object', JSON.stringify(object));
+   console.log(res.json);
   }
 
