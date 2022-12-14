@@ -340,7 +340,7 @@ $(document).ready(function () {
             $( document ).on("click", "button[role='agregar_herramienta']", function(){
            id =  localStorage.getItem('id');
            asignar_herramienta(id);
-           var data = dt.row( $(this).parents('tr') ).remove().draw();
+           dt.row( $(this).parents('tr') ).remove().draw();
           });
         },
       language: {
