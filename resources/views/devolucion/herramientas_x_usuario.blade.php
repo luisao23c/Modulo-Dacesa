@@ -210,7 +210,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
 
-
+    <script src="{{ asset('peticiones/devolucion.js') }}"></script>
     <!-- Para los estilos en Excel     -->
     <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js">
     </script>
@@ -298,7 +298,7 @@
                   var data = table.row($(this).parents('tr')).data();
                   document.getElementById('contenido').innerHTML =`  <form action="{{ route('delete_herramientas_user') }}" method="POST">
                             @csrf
-                            <input type="text" class="form-control" placeholder="observaciones" name="observacion">
+                            <input type="text" class="form-control" placeholder="observaciones" name="observacion"  oninput="myFunction(this.value)">
       <br>
                                     <input id="id_user" name="id_user" type="hidden" value="${data.id_user}">
                                     <input id="id" name="id" type="hidden" value="${data.id}">
@@ -317,11 +317,9 @@
 
                     button.addEventListener('click', (event) => {
                       table.row($(this).parents('tr')).remove().draw();
-
+                      delete_herramientas_user(data.id_user,data.id,data.id_herramienta)
                     });
-                  function eliminar(){
-                    alert(data.id + " " + data.id_user + " " + data.id_herramienta);                    
-                  }
+                 
 
                 });
             });

@@ -108,6 +108,7 @@ class CrudHerramientas extends Controller
   }
   public function delete_herramientas_user(Request $request)
   {
+    return $request->all();
     $herramientas = User_herramientas::find($request->id);
     $herramienta = herramientas::find($request->id_herramienta);
 
