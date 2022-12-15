@@ -72,6 +72,7 @@ Route::post('/almacen', [CrudHerramientas::class, 'almacen'])->name('almacen');
 Route::post('/addherramienta', [CrudHerramientas::class, 'addherramienta'])->name('addherramienta');
 Route::post('/bajaherramienta', [CrudHerramientas::class, 'bajaherramienta'])->name('bajaherramienta');
 Route::get('/get_herramientas_user/{id}', [CrudHerramientas::class, 'get_herramientas_user'])->name('get_herramientas_user');
+Route::get('/vista_herramienta_user/{id}', [CrudHerramientas::class, 'vista_herramienta_user'])->name('vista_herramienta_user');
 Route::post('/delete_herramientas_user', [CrudHerramientas::class, 'delete_herramientas_user'])->name('delete_herramientas_user');
 Route::post('/eliminar_peticion_herramienta', [CrudHerramientas::class, 'eliminar_peticion_herramienta'])->name('eliminar_peticion_herramienta');
 

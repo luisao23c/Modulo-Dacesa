@@ -92,15 +92,19 @@ class CrudHerramientas extends Controller
 
     return redirect()->route('altas_bajas');
   }
-  public function get_herramientas_user($id)
-  {
+  public function  vista_herramienta_user($id){
     $get_herramientas_user = DB::select('select users.id AS id_user,users.name,user_herramientas.id,herramientas.id AS id_herramienta,herramientas.nombre,herramientas.unidad,user_herramientas.cantidad,user_herramientas.asignados,herramientas.numero_serie FROM users INNER JOIN user_herramientas on users.id = user_herramientas.user INNER JOIN herramientas on user_herramientas.herramienta = herramientas.id WHERE users.id = ? and   user_herramientas.reporte  IS  NULL', [$id]);
     $nombre = "";
     foreach ($get_herramientas_user as $key => $value) {
       $nombre = $value->name;
     }
     
-    return view('devolucion.herramientas_x_usuario')->with(compact('nombre'))->with(compact('get_herramientas_user'));
+    return view("devolucion.herramientas_x_usuario")->with(compact('nombre'))->with(compact('id'));
+  }
+  public function get_herramientas_user($id)
+  {
+    $get_herramientas_user = DB::select('select users.id AS id_user,users.name,user_herramientas.id,herramientas.id AS id_herramienta,herramientas.nombre,herramientas.unidad,user_herramientas.cantidad,user_herramientas.asignados,herramientas.numero_serie FROM users INNER JOIN user_herramientas on users.id = user_herramientas.user INNER JOIN herramientas on user_herramientas.herramienta = herramientas.id WHERE users.id = ? and   user_herramientas.reporte  IS  NULL', [$id]);
+    return json_encode($get_herramientas_user);
   }
   public function delete_herramientas_user(Request $request)
   {

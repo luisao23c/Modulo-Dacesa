@@ -117,7 +117,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
             </a>
           </div>
           <div class="offset-2 col-6"> 
-           <h3>{{$nombre}}</h3>        
+           <h3>{{$id}}</h3>        
       </div>
       
 
@@ -138,27 +138,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                   </thead>
                   
                    <tbody>
-                      @foreach ($get_herramientas_user as $item)
-                      <tr>
-                  <form action="{{ route('delete_herramientas_user') }}" method="POST">
-                      @csrf
-                        <td>{{$item->nombre}}</td>
-                        <td>{{$item->unidad}}</td>
-                        @if($item->asignados>0)
-                        <td>{{$item->asignados}}</td>
-                        @endif
-                        @if($item->asignados==Null)
-                        <td>{{$item->cantidad}}</td>
-                        @endif
-                        <td>{{$item->numero_serie}}</td>
-                        <td>
-                          <a href="#demo-modal2" data-id_user ="{{$item->id_user}}"   data-id_herramienta="{{$item->id_herramienta}}"  data-id="{{$item->id}}" onclick="followUser(this); return true;">
-                            <button type="button" class="btn btn-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z"/>
-                              </svg>  
-                            </button>
-                          </a>
+
                           <script>
                           function followUser(e){
                               var idus= e.getAttribute('data-id_user');
@@ -188,8 +168,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                           
                           
                        
-                      </tr>
-                  @endforeach
+                   
                    </tbody>
                </table>
             </div>
@@ -243,11 +222,39 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
 <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js"></script>
 <script>
+  function limpiar(){
+    if(localStorage.getItem("data")){
+        localStorage.clear();
+    }
+  }
 
+async function  get_herramientas_user(){
+  let datos = null;
+  const id = <?php echo $id ?>;
+    
+  const res = await fetch("http://127.0.0.1:8000/get_herramientas_user/"+id, {
+    method: "GET",
+    mode: "cors",
+    headers: {
+        "Content-Type": "application/json",
+    }
+ }).then((res) => res.json())
+    .then((data) => {
+      datos = data;
+      localStorage.setItem("data",JSON.stringify(datos));
+    });
 
-
+}
+get_herramientas_user()
+ 
 $(document).ready(function () {
-    $("#myTable").DataTable({
+  for (var i = 0; i <10; i++) {
+  datos = localStorage.getItem("data");
+ datos = JSON.parse(datos);
+  }
+  
+   table = $("#myTable").DataTable({
+      data:datos,
       language: {
             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
         },
@@ -257,9 +264,24 @@ $(document).ready(function () {
      scrollX:        true,
      scrollCollapse: true,
      paging:         true,
-     columnDefs: [
-         { width: 200, targets: 0 }
-     ],
+     "columns" : [
+            { "data" : "nombre" },
+            { "data" : "unidad" },
+            { "data" : "cantidad" },
+            { "data" : "numero_serie" },
+            {
+                targets: -1,
+                data: null,
+                defaultContent: `  <a href="#demo-modal2">
+                            <button type="button" class="btn btn-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z"/>
+                              </svg>  
+                            </button>
+                          </a>`,
+            },            
+        ],
+        
       dom: '<"row" B> <"row"<"col-md-6 "l> <"col-md-6"f> > rt <"row"<"col-md-6 "i> <"col-md-6"p> >',           buttons:{
            
             buttons: [ 
@@ -267,6 +289,11 @@ $(document).ready(function () {
         },
                   
     });
+    $('#myTable tbody').on( 'click', 'button', function () {
+        var data = table.row( $(this).parents('tr') ).data();
+        alert( data.id + " " + data.id_user +   " "+  data.id_herramienta);
+
+   } );
 });
 $(document).ready(function () {
     $("#myTable2").DataTable({

@@ -167,7 +167,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                         
                          <td>     
                   
-                        <form method="GET" action="{{ route('get_herramientas_user', ['id'=>$item->id]) }}">
+                        <form method="GET" action="{{ route('vista_herramienta_user', ['id'=>$item->id]) }}">
                           @csrf
                           <button type="submit" class=" btn btn-1 " style=""> 
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
