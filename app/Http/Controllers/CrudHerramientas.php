@@ -120,7 +120,6 @@ class CrudHerramientas extends Controller
     $herramientas->update();
     $herramienta->estado = 1;
     $herramienta->update();
-    return redirect()->route('get_herramientas_user', [$request->id_user]);
   }
   public function eliminar_peticion_herramienta(Request $request)
   {
