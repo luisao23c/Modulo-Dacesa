@@ -406,32 +406,63 @@
 
         });
         $(document).ready(function() {
+          
             var dt = $("#myTable2").DataTable({
                 initComplete: function() {
                     $(document).on("click", "button[role='reasignar_herramienta']", function() {
                         id = localStorage.getItem('id');
                         
+                        console.log("ids :" + id + ": " + localStorage.getItem("id_anterior"));
+                      
                         var data = dt.row($(this).parents('tr'));
                         var idx = dt.row(data).index();
                         var temp = dt.row(idx).data();
-                         reasignacion(id);
-                         let object = localStorage.getItem('object');
-                         console.log( "here"+object);
+                        const herramienta = document.getElementById("herramientaa" + id)
+                            .value;
+                        const user = document.getElementById("userr" + id).value;
+                        const ide = document.getElementById("idd" + id).value;
+                        let cantidad = null;
+                        cantidad = document.getElementById("cantidadd" + id).value;
+                        const faltan = localStorage.getItem('faltan');
 
-                        if(object.faltan == object.cantidad) {
-                          dt.row($(this).parents('tr')).remove().draw();
-                        
+                        if (faltan <= 0) {
+                            return alert("Debes agregar un valor");
                         }
-                        else if(object.cantidad > object.faltan){
-                          const total = object.cantidad - object.faltan;
-                          temp[1] = total;
-                          dt.row(idx).data(temp).draw();
-                       
+                        const object = {
+                            id: ide,
+                            user: user,
+                            cantidad: cantidad,
+                            faltan: faltan,
+                            herramienta: herramienta,
+                        };
+                        if (faltan == cantidad) {
+                            dt.row($(this).parents('tr')).remove().draw();
+                            localStorage.clear();
 
                         }
-                       localStorage.clear();
+
+
+                        else  {
+                          localStorage.clear();
+
+                         window.location.reload();
+                        }
+                        if(faltan > cantidad) {
+                          alert("no se puede asignar mas material del pedido");
+                          localStorage.clear();
+                          window.location.reload();
+                        }
+                        const res =  fetch("reasignar_herramienta", {
+                            method: "POST",
+                            mode: "cors",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(object),
+                        });
 
                     });
+
                 },
                 language: {
                     "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"

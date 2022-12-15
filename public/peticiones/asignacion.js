@@ -11,7 +11,14 @@ function myFunction(val) {
     const ide = document.getElementById("id" + partida).value;
     const cantidad = document.getElementById("cantidad" + partida).value;
     const faltan = document.getElementById("faltan" + partida).value;
+    console.log(faltan + "-- " + cantidad );
+    const f = parseInt(faltan);
+    const c = parseInt(cantidad);
     
+    if(f > c) {
+      window.location.reload();
+      alert("no se puede dar mas material del pedido");
+    }
     
     const object = {
         id: ide,
@@ -29,7 +36,9 @@ function myFunction(val) {
         },
         body: JSON.stringify(object),
     });
-    
+    if(c > f){
+      window.location.reload();
+    }
 }
 
 
@@ -43,12 +52,9 @@ async function reasignacion(partida) {
 
     console.log(herramienta + " " + user + " faltan" + faltan );
     if( faltan <= 0) {
-
-      return alert("Debes agregar un valor");
-      
+      return alert("Debes agregar un valor"); 
     }
     console.log(faltan + " >" + cantidad);
-   
     const object = {
         id: ide,
         user: user,
@@ -56,7 +62,6 @@ async function reasignacion(partida) {
         faltan: faltan,
         herramienta: herramienta,
     };
-    
     const res = await fetch("reasignar_herramienta", {
       method: "POST",
       mode: "cors",
@@ -65,8 +70,10 @@ async function reasignacion(partida) {
       },
       body: JSON.stringify(object),
   });
-   console.log(JSON.stringify(object));
-   localStorage.setItem('object', JSON.stringify(object));
-   console.log(res.json);
   }
 
+function limpiar(){
+  localStorage.removeItem("id");
+  localStorage.removeItem("faltan");  
+  localStorage.removeItem("cantidad");  
+}

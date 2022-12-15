@@ -99,6 +99,7 @@ class CrudHerramientas extends Controller
     foreach ($get_herramientas_user as $key => $value) {
       $nombre = $value->name;
     }
+    
     return view('devolucion.herramientas_x_usuario')->with(compact('nombre'))->with(compact('get_herramientas_user'));
   }
   public function delete_herramientas_user(Request $request)
