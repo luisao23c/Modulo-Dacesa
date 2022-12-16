@@ -324,6 +324,7 @@
     <script src="{{ asset('peticiones/asignacion.js') }}"></script>
 
     <script>
+        localStorage.clear();
         $(document).ready(function() {
             var dt = $("#myTable").DataTable({
 
@@ -444,7 +445,6 @@
                             var data = dt.row($(this).parents('tr'));
                             var idx = dt.row(data).index();
                             var temp = dt.row(idx).data();
-                            alert(JSON.stringify(temp));
 
                             id = localStorage.getItem('id');
 
