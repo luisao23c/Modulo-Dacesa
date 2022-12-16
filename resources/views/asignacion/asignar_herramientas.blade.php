@@ -447,11 +447,7 @@
 
                          window.location.reload();
                         }
-                        if(faltan > cantidad) {
-                          alert("no se puede asignar mas material del pedido");
-                          localStorage.clear();
-                          window.location.reload();
-                        }
+                       
                         const res =  fetch("reasignar_herramienta", {
                             method: "POST",
                             mode: "cors",

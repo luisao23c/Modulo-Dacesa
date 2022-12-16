@@ -13,11 +13,14 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="style.css">
     <title>Reporte</title>
-
+    @laravelPWA
+    <link rel="stylesheet" href="{{asset("css/app.css")}}">
 </head>
 <body>
-  <style>
-    div.dt-button-collection {
+  
+@extends('../Menu/Menu')
+<style>
+   div.dt-button-collection {
     position: absolute;
     top: 0;
     left: 0;
@@ -133,7 +136,6 @@
    4px 4px 5px 0px rgba(0,0,0,.1);
   outline: none;
 }
-
 /* 1 */
 .btn-1 {
   background: #ff4081;
@@ -148,7 +150,6 @@ background: linear-gradient(0deg,#ff4081 0%, #e7227b 100%);
  
 /* Estilos para el HEAD de la tabla */
 table.dataTable thead {background-color:#ff4081;color: azure;}
-
 /* Estilos para los botones de paginacion */
 .page-item.active .page-link {
   background-color:#ff4081 !important;
@@ -175,9 +176,7 @@ div.dataTables_wrapper div.dataTables_length select {
     width: 3.5rem !important;
     display: inline-block;
 }    
-    </style>
-@extends('../Menu/Menu')
-
+</style>
 <div class="espacio"></div>
     <div class="container shadow-lg p-3 mb-5 mt-5 bg-body rounded">
       
@@ -197,43 +196,20 @@ div.dataTables_wrapper div.dataTables_length select {
                     </thead>
                     <tbody class=" align-middle">
     @foreach($herramientas as $item)
-  
               <tr>
                 <td></td>
                 <td>{{$item->nombre}}</td>
                 <td>{{$item->numero_serie}}</td>
                 <td>{{$item->unidad}}</td>
                 <td>{{$item->estado}}</td>
-                <td>
-                  <div class="row">
-                  <div class="col-4">
-                    @if($item->estado == 3)
-                    <form  action="{{ route('almacen') }}"  method="POST" name="">
-                      @csrf
-                      <input type="hidden" name="id" value="{{$item->id}}">
-                    <button type="submit" class="btn btn-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z"/>
-                      </svg>  
-                    </button>
-                  </form>
+                <td><form  action="{{ route('reporte_vida_herramienta') }}"  method="POST" name="sample">
+                  @csrf
+                  <input type="hidden" name="id" value="{{$item->id}}">
+                <button type="submit" class=" custom-icon btn-1 " style=""> 
+                  <img  width="30" height="30"  src="https://images.vexels.com/media/users/3/158744/isolated/preview/17f0e622c52dbedf3da254361f5b4e3b-reporte-de-ilustraci--n-by-vexels.png" alt="reportes">
 
-                    @endif
-                  </div>
-                  <div class=" offset-1 col-4">
-                    <form  action="{{ route('reporte_vida_herramienta') }}"  method="POST" name="sample">
-                      @csrf
-                      <input type="hidden" name="id" value="{{$item->id}}">
-                    <button type="submit" class=" custom-icon btn-1 " style=""> 
-                      <img  width="30" height="30"  src="https://images.vexels.com/media/users/3/158744/isolated/preview/17f0e622c52dbedf3da254361f5b4e3b-reporte-de-ilustraci--n-by-vexels.png" alt="reportes">
-    
-                    </button>
-                    </form>
-                  </div>
-                </div>
-                 
-                  
-                 
+                </button>
+                </form>
               </td>
               </tr>
               
@@ -284,7 +260,6 @@ $(document).ready(function() {
       orderCellsTop: true,
         fixedHeader: true,
         select: true,
-
         language: {
             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
         },
@@ -314,7 +289,6 @@ $(document).ready(function() {
            
             },   
              'pdf',
-
               {
                 //definimos estilos del boton de excel
                 extend: "print",
@@ -337,7 +311,6 @@ $(document).ready(function() {
                 extend: "excel",
                 text:'EXCEL',
                 className:'custom-btn btn-1',
-
                 // 1 - ejemplo básico - uso de templates pre-definidos
                 //definimos los parametros al exportar a excel
                 
@@ -353,7 +326,6 @@ $(document).ready(function() {
                     
                 },
                 
-
            
             },
           
@@ -414,6 +386,5 @@ $(document).ready(function() {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
-  </body>
+</body>
 </html>
