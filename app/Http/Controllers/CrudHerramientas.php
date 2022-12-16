@@ -129,6 +129,13 @@ class CrudHerramientas extends Controller
     $alert = 2;
     return redirect()->route('asignacionxusuario', [$request->id_usuario, $request->supervisor, $request->empleado, $request->empleadoname, $request->obra, $alert]);
   }
+  public function solicitudes_faltantes($id = NULL){
+    $solicitud_faltante = DB::select('select users.id,user_herramientas.id,herramientas.id AS herramienta,descripcion,cantidad,asignados,users.name,herramientas.nombre,herramientas.numero_serie,herramientas.unidad FROM user_herramientas INNER JOIN users on user_herramientas.user = users.id INNER JOIN herramientas on user_herramientas.herramienta = herramientas.id WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.user= ? and  user_herramientas.asignados IS NOT NULL  and  user_herramientas.reporte  IS  NULL', [$id]);
+    return json_encode($solicitud_faltante);
+
+  }
+
+
   public function solicitud(Request $request, $id = null)
   {
     if ($id > 0) {

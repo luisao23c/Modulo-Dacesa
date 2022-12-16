@@ -10,7 +10,6 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="style.css">
     <title>Asignacion</title>
 
 </head>
@@ -284,54 +283,7 @@
                         <tbody id="reasignacion">
                             @php $partida = 1 @endphp
                             <br>
-                            @foreach ($solicitud_faltante as $items)
-                                @if ($items->asignados > 0)
-                                    <tr class="table-active">
-                                @endif
-                                @if ($items->asignados == 0)
-                                    <tr>
-                                @endif
 
-
-                                <td>{{ $partida }}</td>
-                                <td>{{ $items->cantidad }}</td>
-                                <td>{{ $items->descripcion }}</td>
-                                <td>
-                                    <div class="mb-3">
-                                        <form id="reasignar_herramienta">
-                                            <input id="herramientaa{{ $partida }}" name="herramienta"
-                                                type="hidden" value="{{ $items->herramienta }}">
-                                            <p>{{ $items->nombre }} / {{ $items->numero_serie }} /
-                                                {{ $items->unidad }} </p>
-
-                                    </div>
-
-                                </td>
-                                <input id="userr{{ $partida }}" name="user" type="hidden"
-                                    value="{{ $user }}">
-                                <input id="idd{{ $partida }}" name="id" type="hidden"
-                                    value="{{ $items->id }}">
-                                <input id="cantidadd{{ $partida }}" name="cantidad" type="hidden"
-                                    value="{{ $items->cantidad }}">
-
-                                <td><input id="faltann{{ $partida }}" type="number" name="faltan"
-                                        id="" oninput="myFunction(this.value)"></td>
-                                <td>
-                                    <button data-id="{{ $partida }}" role='reasignar_herramienta'
-                                        type="button"onclick="obtener_id({{ $partida }});" class="btn btn-1">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20"
-                                            fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd"
-                                                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z" />
-                                        </svg>
-                                    </button>
-                                </td>
-                                </form>
-
-                                </tr>
-                                @php $partida ++ @endphp
-                            @endforeach
 
                         </tbody>
                     </table>
@@ -377,7 +329,7 @@
 
                 initComplete: function() {
                     $(document).on("click", "button[role='agregar_herramienta']", function() {
-                        id = localStorage.getItem('id');
+                        let id = localStorage.getItem('id');
                         asignar_herramienta(id);
                         var data = dt.row($(this).parents('tr')).remove().draw();
                     });
@@ -406,79 +358,159 @@
 
         });
         $(document).ready(function() {
-          
-            var dt = $("#myTable2").DataTable({
-                initComplete: function() {
-                    $(document).on("click", "button[role='reasignar_herramienta']", function() {
-                        id = localStorage.getItem('id');
-                        
-                        console.log("ids :" + id + ": " + localStorage.getItem("id_anterior"));
-                      
-                        var data = dt.row($(this).parents('tr'));
-                        var idx = dt.row(data).index();
-                        var temp = dt.row(idx).data();
-                        const herramienta = document.getElementById("herramientaa" + id)
-                            .value;
-                        const user = document.getElementById("userr" + id).value;
-                        const ide = document.getElementById("idd" + id).value;
-                        let cantidad = null;
-                        cantidad = document.getElementById("cantidadd" + id).value;
-                        const faltan = localStorage.getItem('faltan');
+            let datos = null;
 
-                        if (faltan <= 0) {
-                            return alert("Debes agregar un valor");
+            function promise() {
+                new Promise(function(resolve) {
+
+                    resolve(get_solicitudes_faltantes());
+
+                }).then(function(result) {
+                    generar_table();
+
+                })
+            }
+            promise();
+            async function get_solicitudes_faltantes() {
+                const id = <?php echo $user; ?>;
+
+                const res = await fetch("http://127.0.0.1:8000/solicitudes_faltantes/" + id, {
+                        method: "GET",
+                        mode: "cors",
+                        headers: {
+                            "Content-Type": "application/json",
                         }
-                        const object = {
-                            id: ide,
-                            user: user,
-                            cantidad: cantidad,
-                            faltan: faltan,
-                            herramienta: herramienta,
-                        };
-                        if (faltan == cantidad) {
-                            dt.row($(this).parents('tr')).remove().draw();
-                            localStorage.clear();
+                    }).then((res) => res.json())
+                    .then((data) => {
+                        datos = data;
+                    });
+            }
+            get_solicitudes_faltantes();
 
-                        }
+            function generar_table() {
+                cont = 1;
+                var dt = $("#myTable2").DataTable({
+                    data: datos,
+                    "columns": [{
+                            data: null,
+                            render: function(data, type, row) {
+                                return cont++;
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row) {
+                                return ` <p id="cantidad${cont}">${data.cantidad}</p>`  ;
+                            }
+                        },
+
+                        {
+                            data: null,
+                            render: function(data, type, row) {
+                                return ` <p id="descripcion${cont}">${data.descripcion}</p>`  ;
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row) {
+                                return ` <p id="herramienta${cont}">${data.nombre}</p>`  ;
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row) {
+                                return '<input  type="number" placeholder=""  oninput="myFunction(this.value)" value="" id="faltan" name="faltan"> ';
+                            }
+                        },
+                        {
+                            targets: -1,
+                            data: null,
+                            defaultContent: ` 
+                            <button type="button" role='reasignar_herramienta' class="btn btn-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20"
+                                            fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z" />
+                                        </svg>
+                            </button>
+                          `,
+                        },
+
+                    ],
+                  
+                    initComplete: function() {
+                        $(document).on("click", "button[role='reasignar_herramienta']", function() {
+                            var datos = dt.row($(this).parents('tr')).data();
+                            var data = dt.row($(this).parents('tr'));
+                            var idx = dt.row(data).index();
+                            var temp = dt.row(idx).data();
+                            alert(JSON.stringify(temp));
+
+                            id = localStorage.getItem('id');
+
+                            alert(JSON.stringify(datos));
+                            
+                            const herramienta = datos.herramienta;
+                            
+                            const user = <?php echo $user; ?>;
+                            const ide = datos.id;
+                            let cantidad = null;
+                            cantidad = datos.cantidad;
+                            const faltan = localStorage.getItem('faltan');
+
+                            if (faltan <= 0) {
+                                return alert("Debes agregar un valor");
+                            }
+                            const object = {
+                                id: ide,
+                                user: user,
+                                cantidad: cantidad,
+                                faltan: faltan,
+                                herramienta: herramienta,
+                            };
+                            if (faltan == cantidad) {
+                                dt.row($(this).parents('tr')).remove().draw();
+                                localStorage.clear();
+
+                            } else {
+                                dt.clear().destroy();
+                                promise();
 
 
-                        else  {
-                          localStorage.clear();
+                            }
 
-                         window.location.reload();
-                        }
-                       
-                        const res =  fetch("reasignar_herramienta", {
-                            method: "POST",
-                            mode: "cors",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(object),
+                            const res = fetch("reasignar_herramienta", {
+                                method: "POST",
+                                mode: "cors",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(object),
+                            });
+
                         });
 
-                    });
+                    },
+                    language: {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                    },
+                    pageLength: 2,
 
-                },
-                language: {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-                },
-                pageLength: 2,
+                    scrollY: "400px",
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: true,
+                    columnDefs: [{
+                        width: 308,
+                        targets: 0
+                    }],
+                    dom: '<"row" B> <"row"<"col-md-6 "l> <"col-md-6"f> > rt <"row"<"col-md-6 "i> <"col-md-6"p> >',
+                    buttons: {
 
-                scrollY: "400px",
-                scrollX: true,
-                scrollCollapse: true,
-                paging: true,
-                columnDefs: [{
-                    width: 308,
-                    targets: 0
-                }],
-                dom: '<"row" B> <"row"<"col-md-6 "l> <"col-md-6"f> > rt <"row"<"col-md-6 "i> <"col-md-6"p> >',
-                buttons: {
-
-                    buttons: []
-                }
-            });
+                        buttons: []
+                    }
+                });
+            }
 
         });
     </script>

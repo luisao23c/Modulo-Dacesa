@@ -1,6 +1,7 @@
 
 function obtener_id(partida) {
  localStorage.setItem('id', partida);
+ alert("Angel " + partida );
 }
 function myFunction(val) {
   localStorage.setItem('faltan', val);

@@ -13,7 +13,6 @@ async function delete_herramientas_user(id_user,id,id_herramienta) {
         id_herramienta: id_herramienta,
         observacion : observaciones,
     };
-     alert(JSON.stringify(object));
     const res = await fetch("http://127.0.0.1:8000/delete_herramientas_user", {
         method: "POST",
         mode: "cors",
