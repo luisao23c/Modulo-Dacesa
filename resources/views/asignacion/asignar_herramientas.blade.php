@@ -324,7 +324,6 @@
     <script src="{{ asset('peticiones/asignacion.js') }}"></script>
 
     <script>
-        localStorage.clear()
         $(document).ready(function() {
             var dt = $("#myTable").DataTable({
 
@@ -391,7 +390,6 @@
             function generar_table() {
                 cont = 1;
                 var dt = $("#myTable2").DataTable({
-
                     data: datos,
                     "columns": [{
                             data: null,
@@ -481,7 +479,6 @@
 
                             }
 
-                            
                             const res = fetch("reasignar_herramienta", {
                                 method: "POST",
                                 mode: "cors",
