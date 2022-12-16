@@ -324,6 +324,7 @@
     <script src="{{ asset('peticiones/asignacion.js') }}"></script>
 
     <script>
+        localStorage.clear()
         $(document).ready(function() {
             var dt = $("#myTable").DataTable({
 
@@ -390,6 +391,7 @@
             function generar_table() {
                 cont = 1;
                 var dt = $("#myTable2").DataTable({
+
                     data: datos,
                     "columns": [{
                             data: null,
@@ -400,20 +402,20 @@
                         {
                             data: null,
                             render: function(data, type, row) {
-                                return ` <p id="cantidad${cont}">${data.cantidad}</p>`  ;
+                                return ` <p id="cantidadd${cont}">${data.cantidad}</p>`;
                             }
                         },
 
                         {
                             data: null,
                             render: function(data, type, row) {
-                                return ` <p id="descripcion${cont}">${data.descripcion}</p>`  ;
+                                return ` <p id="descripcionn${cont}">${data.descripcion}</p>`;
                             }
                         },
                         {
                             data: null,
                             render: function(data, type, row) {
-                                return ` <p id="herramienta${cont}">${data.nombre}</p>`  ;
+                                return ` <p id="herramientaa${cont}">${data.nombre}</p>`;
                             }
                         },
                         {
@@ -426,7 +428,7 @@
                             targets: -1,
                             data: null,
                             defaultContent: ` 
-                            <button type="button" role='reasignar_herramienta' class="btn btn-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <button type="button" role='reasignar_herramienta'  class="btn btn-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20"
                                             fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -437,7 +439,7 @@
                         },
 
                     ],
-                  
+
                     initComplete: function() {
                         $(document).on("click", "button[role='reasignar_herramienta']", function() {
                             var datos = dt.row($(this).parents('tr')).data();
@@ -449,9 +451,9 @@
                             id = localStorage.getItem('id');
 
                             alert(JSON.stringify(datos));
-                            
+
                             const herramienta = datos.herramienta;
-                            
+
                             const user = <?php echo $user; ?>;
                             const ide = datos.id;
                             let cantidad = null;
@@ -479,6 +481,7 @@
 
                             }
 
+                            
                             const res = fetch("reasignar_herramienta", {
                                 method: "POST",
                                 mode: "cors",

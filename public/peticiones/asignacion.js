@@ -1,7 +1,8 @@
 
 function obtener_id(partida) {
  localStorage.setItem('id', partida);
- alert("Angel " + partida );
+ let angel = document.getElementById('herramientaa' + partida).value 
+ alert("Angel " + angel );
 }
 function myFunction(val) {
   localStorage.setItem('faltan', val);
