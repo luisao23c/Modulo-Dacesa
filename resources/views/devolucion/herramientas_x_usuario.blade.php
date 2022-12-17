@@ -10,7 +10,6 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
@@ -223,7 +222,7 @@
             resolve(get_herramientas_user());
 
         }).then(function(result) {
-
+            localStorage.clear();
             generar_table();
 
         })
@@ -249,7 +248,6 @@
 
 
             $(document).ready(function() {
-
 
                 table = $("#myTable").DataTable({
                     data: datos,
@@ -317,23 +315,15 @@
 
                     button.addEventListener('click', (event) => {
                       table.row($(this).parents('tr')).remove().draw();
-                      delete_herramientas_user(data.id_user,data.id,data.id_herramienta)
+                      delete_herramientas_user(data.id_user,data.id,data.id_herramienta);
+                      localStorage.clear();
                     });
                  
 
                 });
             });
         }
-        $(document).ready(function() {
-            $("#myTable2").DataTable({
-
-                dom: '<"row" B> <"row"<"col-md-6 "l> <"col-md-6"f> > rt <"row"<"col-md-6 "i> <"col-md-6"p> >',
-                buttons: {
-
-                    buttons: []
-                }
-            });
-        });
+      
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
