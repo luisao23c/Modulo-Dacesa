@@ -281,7 +281,6 @@
                         </thead>
 
                         <tbody id="reasignacion">
-                            @php $partida = 1 @endphp
                             <br>
 
 
@@ -325,14 +324,19 @@
 
     <script>
         localStorage.clear();
+        let dt = null;
         $(document).ready(function() {
-            var dt = $("#myTable").DataTable({
+            var dt1 = $("#myTable").DataTable({
 
                 initComplete: function() {
                     $(document).on("click", "button[role='agregar_herramienta']", function() {
-                        let id = localStorage.getItem('id');
+                        id = localStorage.getItem('id');
                         asignar_herramienta(id);
-                        var data = dt.row($(this).parents('tr')).remove().draw();
+                        var data = dt1.row($(this).parents('tr')).remove().draw();
+                        dt.ajax.reload();
+                        localStorage.clear();
+
+
                     });
                 },
                 language: {
@@ -358,40 +362,21 @@
             });
 
         });
-        $(document).ready(function() {
-            let datos = null;
 
-            function promise() {
-                new Promise(function(resolve) {
-
-                    resolve(get_solicitudes_faltantes());
-
-                }).then(function(result) {
-                    generar_table();
-
-                })
-            }
-            promise();
-            async function get_solicitudes_faltantes() {
+            $(document).ready(function() {
                 const id = <?php echo $user; ?>;
-
-                const res = await fetch("http://127.0.0.1:8000/solicitudes_faltantes/" + id, {
-                        method: "GET",
-                        mode: "cors",
-                        headers: {
-                            "Content-Type": "application/json",
-                        }
-                    }).then((res) => res.json())
-                    .then((data) => {
-                        datos = data;
-                    });
-            }
-            get_solicitudes_faltantes();
-
-            function generar_table() {
                 cont = 1;
-                var dt = $("#myTable2").DataTable({
-                    data: datos,
+                dt = $("#myTable2").DataTable({
+                    ajax: {
+                        "url": "http://127.0.0.1:8000/solicitudes_faltantes/" + id,
+                        "dataSrc": ""
+                    },
+                    columnDefs: [{
+                        width: 490,
+                        targets: 0
+                    },
+                   
+                ],
                     "columns": [{
                             data: null,
                             render: function(data, type, row) {
@@ -399,23 +384,14 @@
                             }
                         },
                         {
-                            data: null,
-                            render: function(data, type, row) {
-                                return ` <p id="cantidadd${cont}">${data.cantidad}</p>`;
-                            }
-                        },
+                            data: "cantidad",
 
-                        {
-                            data: null,
-                            render: function(data, type, row) {
-                                return ` <p id="descripcionn${cont}">${data.descripcion}</p>`;
-                            }
                         },
                         {
-                            data: null,
-                            render: function(data, type, row) {
-                                return ` <p id="herramientaa${cont}">${data.nombre}</p>`;
-                            }
+                            data: "descripcion",
+                        },
+                        {
+                            data: "nombre",
                         },
                         {
                             data: null,
@@ -436,22 +412,16 @@
                             </button>
                           `,
                         },
-
                     ],
-
                     initComplete: function() {
                         $(document).on("click", "button[role='reasignar_herramienta']", function() {
+
                             var datos = dt.row($(this).parents('tr')).data();
                             var data = dt.row($(this).parents('tr'));
                             var idx = dt.row(data).index();
                             var temp = dt.row(idx).data();
-
-                            id = localStorage.getItem('id');
-
                             alert(JSON.stringify(datos));
-
                             const herramienta = datos.herramienta;
-
                             const user = <?php echo $user; ?>;
                             const ide = datos.id;
                             let cantidad = null;
@@ -468,16 +438,7 @@
                                 faltan: faltan,
                                 herramienta: herramienta,
                             };
-                            if (faltan == cantidad) {
-                                dt.row($(this).parents('tr')).remove().draw();
-                                localStorage.clear();
-
-                            } else {
-                                dt.clear().destroy();
-                                promise();
-
-
-                            }
+                           
 
                             const res = fetch("reasignar_herramienta", {
                                 method: "POST",
@@ -487,7 +448,8 @@
                                 },
                                 body: JSON.stringify(object),
                             });
-
+                            dt.ajax.reload();
+                            localStorage.clear();
                         });
 
                     },
@@ -500,19 +462,16 @@
                     scrollX: true,
                     scrollCollapse: true,
                     paging: true,
-                    columnDefs: [{
-                        width: 308,
-                        targets: 0
-                    }],
+                   
                     dom: '<"row" B> <"row"<"col-md-6 "l> <"col-md-6"f> > rt <"row"<"col-md-6 "i> <"col-md-6"p> >',
                     buttons: {
 
                         buttons: []
                     }
                 });
-            }
 
-        });
+            });
+        
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">

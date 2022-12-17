@@ -1,8 +1,6 @@
 
 function obtener_id(partida) {
  localStorage.setItem('id', partida);
- let angel = document.getElementById('herramientaa' + partida).value 
- alert("Angel " + angel );
 }
 function myFunction(val) {
   localStorage.setItem('faltan', val);
@@ -39,7 +37,7 @@ function myFunction(val) {
         body: JSON.stringify(object),
     });
     if(c > f){
-      window.location.reload();
+      localStorage.setItem("recargar",true);
     }
 }
 
