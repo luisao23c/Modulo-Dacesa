@@ -13,14 +13,11 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="style.css">
     <title>Reporte</title>
-    @laravelPWA
-    <link rel="stylesheet" href="{{asset("css/app.css")}}">
+
 </head>
 <body>
-  
-@extends('../Menu/Menu')
-<style>
-   div.dt-button-collection {
+  <style>
+    div.dt-button-collection {
     position: absolute;
     top: 0;
     left: 0;
@@ -176,7 +173,9 @@ div.dataTables_wrapper div.dataTables_length select {
     width: 3.5rem !important;
     display: inline-block;
 }    
-</style>
+    </style>
+@extends('../Menu/Menu')
+
 <div class="espacio"></div>
     <div class="container shadow-lg p-3 mb-5 mt-5 bg-body rounded">
       

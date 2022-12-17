@@ -420,7 +420,6 @@
                             var data = dt.row($(this).parents('tr'));
                             var idx = dt.row(data).index();
                             var temp = dt.row(idx).data();
-                            alert(JSON.stringify(datos));
                             const herramienta = datos.herramienta;
                             const user = <?php echo $user; ?>;
                             const ide = datos.id;
