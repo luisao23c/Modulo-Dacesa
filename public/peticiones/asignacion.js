@@ -5,6 +5,25 @@ function obtener_id(partida) {
 function myFunction(val) {
   localStorage.setItem('faltan', val);
 }
+
+function select_reload() {
+  fetch("http://127.0.0.1:8000/reporte_herramientas", {
+      method: "GET"
+    })
+    .then(response => response.json())
+    .then(data => {
+      let array = data;  
+      let html = '';
+      array.forEach(element => {
+        html += "<option value=" + element.id + ">" + element.nombre + "</option>"
+
+      });
+      document.getElementById("subwaystation").innerHTML = html;
+    })
+}
+select_reload();
+
+
   async function asignar_herramienta(partida) {
     const herramienta = document.getElementById("herramienta" + partida).value;
     const user = document.getElementById("user" + partida).value;

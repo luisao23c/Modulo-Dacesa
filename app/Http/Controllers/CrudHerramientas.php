@@ -156,18 +156,15 @@ class CrudHerramientas extends Controller
       $id_faltante = $value->id;
     }
     $user = $request->id;
-    $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
-        return view('asignacion.asignar_herramientas')->with(compact('id_faltante'))->with(compact('name_faltante'))->with(compact('solicitud_faltante'))->with(compact('id'))->with(compact('name'))->with(compact('solicitud'))->with(compact('herramientas'))->with(compact('user'));
-    $usuario = array();
-    $id =["id" => $id];
-    $name=["name" => $name];
-    $name_faltante=["name_faltante" => $name_faltante];
-    $user=["user" => $user];
-    $id_faltante=["id_faltante" => $id_faltante];
-    array_push($usuario,$user,$name,$name_faltante,$user,$id_faltante);
-    return json_encode([$solicitud_faltante, $solicitud,$herramientas,$usuario]);
+        return view('asignacion.asignar_herramientas')->with(compact('id_faltante'))->with(compact('name_faltante'))->with(compact('solicitud_faltante'))->with(compact('id'))->with(compact('name'))->with(compact('solicitud'))->with(compact('user'));
+
 
   }
+  public function select(){
+    $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
+    json_encode($herramientas);
+  }
+
   public function asignar_herramienta(Request $request)
   {
 

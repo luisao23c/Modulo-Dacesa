@@ -216,14 +216,11 @@
                                 <td>
                                     <form id="asignar_herramienta">
                                         @csrf
-                                        <select class="form-select"id="herramienta{{ $partida }}"
-                                            name="herramienta">
-
-                                            @foreach ($herramientas as $item)
-                                                <option selected value="{{ $item->id }}"> {{ $item->nombre }} /
-                                                    {{ $item->numero_serie }} / {{ $item->unidad }} </option>
-                                            @endforeach
-                                        </select>
+                                        <div class="col-4">
+                                            <select id="subwaystation" class="form-select" aria-label="Default select example">
+                                            </select>   
+                                        </div>
+                                        
 
                                 </td>
                                 <input id="user{{ $partida }}" name="user" type="hidden"
