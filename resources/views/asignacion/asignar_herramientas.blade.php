@@ -216,11 +216,14 @@
                                 <td>
                                     <form id="asignar_herramienta">
                                         @csrf
-                                        <div class="col-4">
-                                            <select id="subwaystation" class="form-select" aria-label="Default select example">
-                                            </select>   
-                                        </div>
-                                        
+                                        <select class="form-select"id="herramienta{{ $partida }}"
+                                            name="herramienta">
+
+                                            @foreach ($herramientas as $item)
+                                                <option selected value="{{ $item->id }}"> {{ $item->nombre }} /
+                                                    {{ $item->numero_serie }} / {{ $item->unidad }} </option>
+                                            @endforeach
+                                        </select>
 
                                 </td>
                                 <input id="user{{ $partida }}" name="user" type="hidden"
@@ -329,8 +332,16 @@
                     $(document).on("click", "button[role='agregar_herramienta']", function() {
                         id = localStorage.getItem('id');
                         asignar_herramienta(id);
+
                         var data = dt1.row($(this).parents('tr')).remove().draw();
                         dt.ajax.reload();
+                        fetch("http://127.0.0.1:8000/reporte_herramientas", {
+                                method: "GET"
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                              
+                            })
                         localStorage.clear();
 
 
@@ -360,46 +371,46 @@
 
         });
 
-            $(document).ready(function() {
-                const id = <?php echo $user; ?>;
-                cont = 1;
-                dt = $("#myTable2").DataTable({
-                    ajax: {
-                        "url": "http://127.0.0.1:8000/solicitudes_faltantes/" + id,
-                        "dataSrc": ""
-                    },
-                    columnDefs: [{
+        $(document).ready(function() {
+            const id = <?php echo $user; ?>;
+            cont = 1;
+            dt = $("#myTable2").DataTable({
+                ajax: {
+                    "url": "http://127.0.0.1:8000/solicitudes_faltantes/" + id,
+                    "dataSrc": ""
+                },
+                columnDefs: [{
                         width: 200,
                         targets: 0
                     },
-                   
-                ],
-                    "columns": [{
-                            data: null,
-                            render: function(data, type, row) {
-                                return cont++;
-                            }
-                        },
-                        {
-                            data: "cantidad",
 
-                        },
-                        {
-                            data: "descripcion",
-                        },
-                        {
-                            data: "nombre",
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, row) {
-                                return '<input  type="number" placeholder=""  oninput="myFunction(this.value)" value="" id="faltan" name="faltan"> ';
-                            }
-                        },
-                        {
-                            targets: -1,
-                            data: null,
-                            defaultContent: ` 
+                ],
+                "columns": [{
+                        data: null,
+                        render: function(data, type, row) {
+                            return cont++;
+                        }
+                    },
+                    {
+                        data: "cantidad",
+
+                    },
+                    {
+                        data: "descripcion",
+                    },
+                    {
+                        data: "nombre",
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            return '<input  type="number" placeholder=""  oninput="myFunction(this.value)" value="" id="faltan" name="faltan"> ';
+                        }
+                    },
+                    {
+                        targets: -1,
+                        data: null,
+                        defaultContent: ` 
                             <button type="button" role='reasignar_herramienta'  class="btn btn-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20"
                                             fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
@@ -408,66 +419,65 @@
                                         </svg>
                             </button>
                           `,
-                        },
-                    ],
-                    initComplete: function() {
-                        $(document).on("click", "button[role='reasignar_herramienta']", function() {
+                    },
+                ],
+                initComplete: function() {
+                    $(document).on("click", "button[role='reasignar_herramienta']", function() {
 
-                            var datos = dt.row($(this).parents('tr')).data();
-                            var data = dt.row($(this).parents('tr'));
-                            var idx = dt.row(data).index();
-                            var temp = dt.row(idx).data();
-                            const herramienta = datos.herramienta;
-                            const user = <?php echo $user; ?>;
-                            const ide = datos.id;
-                            let cantidad = null;
-                            cantidad = datos.cantidad;
-                            const faltan = localStorage.getItem('faltan');
+                        var datos = dt.row($(this).parents('tr')).data();
+                        var data = dt.row($(this).parents('tr'));
+                        var idx = dt.row(data).index();
+                        var temp = dt.row(idx).data();
+                        const herramienta = datos.herramienta;
+                        const user = <?php echo $user; ?>;
+                        const ide = datos.id;
+                        let cantidad = null;
+                        cantidad = datos.cantidad;
+                        const faltan = localStorage.getItem('faltan');
 
-                            if (faltan <= 0) {
-                                return alert("Debes agregar un valor");
-                            }
-                            const object = {
-                                id: ide,
-                                user: user,
-                                cantidad: cantidad,
-                                faltan: faltan,
-                                herramienta: herramienta,
-                            };
-                           
+                        if (faltan <= 0) {
+                            return alert("Debes agregar un valor");
+                        }
+                        const object = {
+                            id: ide,
+                            user: user,
+                            cantidad: cantidad,
+                            faltan: faltan,
+                            herramienta: herramienta,
+                        };
 
-                            const res = fetch("reasignar_herramienta", {
-                                method: "POST",
-                                mode: "cors",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(object),
-                            });
-                            dt.ajax.reload();
-                            localStorage.clear();
+
+                        const res = fetch("reasignar_herramienta", {
+                            method: "POST",
+                            mode: "cors",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(object),
                         });
+                        dt.ajax.reload();
+                        localStorage.clear();
+                    });
 
-                    },
-                    language: {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-                    },
-                    pageLength: 2,
+                },
+                language: {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                },
+                pageLength: 2,
 
-                    scrollY: "400px",
-                    scrollX: true,
-                    scrollCollapse: true,
-                    paging: true,
-                   
-                    dom: '<"row" B> <"row"<"col-md-6 "l> <"col-md-6"f> > rt <"row"<"col-md-6 "i> <"col-md-6"p> >',
-                    buttons: {
+                scrollY: "400px",
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
 
-                        buttons: []
-                    }
-                });
+                dom: '<"row" B> <"row"<"col-md-6 "l> <"col-md-6"f> > rt <"row"<"col-md-6 "i> <"col-md-6"p> >',
+                buttons: {
 
+                    buttons: []
+                }
             });
-        
+
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
