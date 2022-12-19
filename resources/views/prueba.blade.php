@@ -1,30 +1,52 @@
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+</head>
 
 <body>
-<table id="table_id" class="display">
-    <thead>
-        <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
-        </tr>
-    </tbody>
-</table>
+ 
+                <input class="form-control" type="file" id="input" accept=".xls,.xlsx"  >
+           
+                <button class="btn btn-primary" id="button">Convert</button>
+    <pre id="jsondata"></pre>
+</div>
+        </div>
+    </div>
 </body>
-
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 <script>
-$(document).ready( function () {
-    $('#table_id').DataTable();
-} );
+    let selectedFile;
+console.log(window.XLSX);
+document.getElementById('input').addEventListener("change", (event) => {
+    selectedFile = event.target.files[0];
+})
+
+let data=[{
+    "name":"jayanth",
+    "data":"scd",
+    "abc":"sdef"
+}]
+
+
+document.getElementById('button').addEventListener("click", () => {
+    XLSX.utils.json_to_sheet(data, 'out.xlsx');
+    if(selectedFile){
+        let fileReader = new FileReader();
+        fileReader.readAsBinaryString(selectedFile);
+        fileReader.onload = (event)=>{
+         let data = event.target.result;
+         let workbook = XLSX.read(data,{type:"binary"});
+         console.log(workbook);
+         workbook.SheetNames.forEach(sheet => {
+              let rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
+              console.log(rowObject);
+              document.getElementById("jsondata").innerHTML = JSON.stringify(rowObject,undefined,4)
+         });
+        }
+    }
+});
 </script>
+
+</html>

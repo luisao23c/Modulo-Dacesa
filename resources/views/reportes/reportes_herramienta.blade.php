@@ -361,12 +361,7 @@ $(document).ready(function() {
                                 return rowData[4] == '0';
                             }
                         },
-                        {
-                            label: 'reparacion',
-                            value: function(rowData, rowIdx) {
-                                return rowData[4] == '3';
-                            }
-                        }
+                     
                     ],
                     combiner: 'and'
                 },

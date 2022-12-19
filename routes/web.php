@@ -33,6 +33,7 @@ Route::get('/altas_bajas', function () {
     foreach ($herramientas as $key => $value) {
         array_push($herramientas_select, $value->nombre);
     }
+    
     return view('altas_bajas.herramientas')->with(compact('herramientas_select'))->with(compact('herramientas'));
 })->name('altas_bajas');
 Route::get('/devolucion', function () {
@@ -85,6 +86,8 @@ Route::post('/reasignar_herramienta', [CrudHerramientas::class, 'reasignar_herra
 Route::post('/add_caja', [CrudHerramientas::class, 'add_caja'])->name('add_caja');
 
 //-------------------------------------REPORTES------------------------------------------------------
+Route::get('/reporte_herramientas',[Reportes::class, 'reporte_herramientas'])->name('reporte_herramientas');
+
 Route::get('/reporte_trabajador', [Reportes::class, 'reporte_trabajador'])->name('reporte_trabajador');
 Route::get('/reportes_supervisor/{id_obra}', function ($id_obra) {
     $obra = DB::select('select obra,cliente from obras where obras.id = ?', [$id_obra]);

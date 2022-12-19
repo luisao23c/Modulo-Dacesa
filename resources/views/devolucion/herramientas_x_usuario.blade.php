@@ -149,9 +149,7 @@
 
                         <tbody>
 
-                            <script>
-                    
-                            </script>
+                            <script></script>
 
 
 
@@ -178,7 +176,7 @@
                     <h1>Estas seguro de regresarlo a almacen?</h1>
                     <div class="mb-3">
                         <div id="contenido">
-                        
+
                         </div>
 
 
@@ -293,37 +291,36 @@
 
                 });
                 $('#myTable tbody').on('click', 'button', function() {
-                  var data = table.row($(this).parents('tr')).data();
-                  document.getElementById('contenido').innerHTML =`  <form action="{{ route('delete_herramientas_user') }}" method="POST">
+                    var data = table.row($(this).parents('tr')).data();
+                    document.getElementById('contenido').innerHTML = `  <form action="{{ route('delete_herramientas_user') }}" method="POST">
                             @csrf
                             <input type="text" class="form-control" placeholder="observaciones" name="observacion"  oninput="myFunction(this.value)">
-      <br>
-                                    <input id="id_user" name="id_user" type="hidden" value="${data.id_user}">
-                                    <input id="id" name="id" type="hidden" value="${data.id}">
-                        <input id="id_herramienta" name="id_herramienta" type="hidden" value="${data.id_herramienta}">
-                        <div class="modal-header">
-        <button type="button" id="eliminar" class="btn-1 btn" data-bs-dismiss="modal" aria-label="Close">
-          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z"/>
-                </svg>
-          </button>
-      </div>
+                            <br>
+                                                            <input id="id_user" name="id_user" type="hidden" value="${data.id_user}">
+                                                            <input id="id" name="id" type="hidden" value="${data.id}">
+                                                <input id="id_herramienta" name="id_herramienta" type="hidden" value="${data.id_herramienta}">
+                                                <div class="modal-header">
+                                <button type="button" id="eliminar" class="btn-1 btn" data-bs-dismiss="modal" aria-label="Close">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z"/>
+                                        </svg>
+                                </button>
+                            </div>
               
                           </form>`
-                  $('#myModalExito').modal('demo-modal2');
-                  const button = document.getElementById('eliminar');
+                    $('#myModalExito').modal('demo-modal2');
+                    const button = document.getElementById('eliminar');
 
                     button.addEventListener('click', (event) => {
-                      table.row($(this).parents('tr')).remove().draw();
-                      delete_herramientas_user(data.id_user,data.id,data.id_herramienta);
-                      localStorage.clear();
+                        table.row($(this).parents('tr')).remove().draw();
+                        delete_herramientas_user(data.id_user, data.id, data.id_herramienta);
+                        localStorage.clear();
                     });
-                 
+
 
                 });
             });
         }
-      
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">

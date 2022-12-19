@@ -86,11 +86,7 @@ class CrudHerramientas extends Controller
   }
   public function bajaherramienta(Request $request)
   {
-    $herramientas = $request->herramientas;
-
-    $herramienta = DB::select('update herramientas set estado = 0 where numero_serie = ?', [$herramientas]);
-
-    return redirect()->route('altas_bajas');
+    $herramienta = DB::select('update herramientas set estado = 0 where id = ?', [$request->id]);
   }
   public function  vista_herramienta_user($id){
     $get_herramientas_user = DB::select('select users.id AS id_user,users.name,user_herramientas.id,herramientas.id AS id_herramienta,herramientas.nombre,herramientas.unidad,user_herramientas.cantidad,user_herramientas.asignados,herramientas.numero_serie FROM users INNER JOIN user_herramientas on users.id = user_herramientas.user INNER JOIN herramientas on user_herramientas.herramienta = herramientas.id WHERE users.id = ? and   user_herramientas.reporte  IS  NULL', [$id]);

@@ -372,7 +372,7 @@
                         "dataSrc": ""
                     },
                     columnDefs: [{
-                        width: 490,
+                        width: 200,
                         targets: 0
                     },
                    

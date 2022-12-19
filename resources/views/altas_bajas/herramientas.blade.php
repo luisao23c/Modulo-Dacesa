@@ -4,13 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="style.css">
     <title>Altas/Bajas</title>
 
 </head>
@@ -193,13 +192,7 @@
 
     <div class="container shadow-lg p-3 mb-5 mt-5 bg-body rounded">
 
-        <button type="button" class="btn btn-1" data-bs-toggle="modal" data-bs-target="#nuevaherramienta">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor"
-                class="bi bi-plus-lg" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
-            </svg>
-        </button>
+       
         <div class="row">
             <div class="col">
                 <table id="example" class="table table-striped" style="width:100%">
@@ -212,78 +205,13 @@
                         </tr>
                     </thead>
                     <tbody class=" align-middle">
-                        @foreach ($herramientas as $item)
-                            <tr style="    background-color: #ffffff  ;
-                ">
-                                <td>{{ $item->nombre }}</td>
-                                <td> {{ $item->unidad }}</td>
-                                <td> {{ $item->numero_serie }}</td>
-                                <td>
-                                <div class="row">
-                                  <div class="col-4">
-                                    <form action="{{ route('reparacion') }}" method="POST">
-                                      @csrf
-                                      <input type="hidden" name="id" value="{{$item->id}}">
-                                    <button type="submit" class="btn btn-1">
-                                      <img src="https://cdn-icons-png.flaticon.com/512/777/777081.png"
-                                          alt="" width="30px" height="20px">
-                                  </button>
-                                </form>
-                                  </div>
-                                  <div class=" offset-1 col-4">
-                                    <a href="#demo-modal2" data-id="{{ $item->id }}"
-                                      onclick="followUser(this); return true;">
 
-                                      <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                          data-bs-target="#exampleModal">
-                                          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20"
-                                              fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                              <path
-                                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z">
-                                              </path>
-                                              <path fill-rule="evenodd"
-                                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z">
-                                              </path>
-                                          </svg>
-                                      </button>
-                                  </a>
-
-                                  </div>
-                                </div>
-                                
-                              
-                                 
-
-                                </td>
-                            </tr>
-                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <script>
-        function followUser(e) {
-            var id = e.getAttribute('data-id');
-            console.log(id);
-
-            document.getElementById("contenido").innerHTML = `
-            <form action="{{ route('bajaherramienta') }}" method="POST">
-              @csrf  
-              <input id="id" name="herramientas" type="hidden" value="${id}" >
-            <button type="submit" class="btn btn-danger ">
-        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
-          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
-        </svg>
-      </button>
-      
-      
-              </form>
-                `;
-
-        }
-    </script>
+    <script></script>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -318,24 +246,14 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-6">
-                            <form action="{{ route('add_herramienta_excel') }}" method="POST"
-                                enctype="multipart/form-data" />
-                            @csrf
-                            <div class="file-input text-center  ">
-                                <input type="file" name="dataCliente" id="file-input" class="file-input__input" />
-                                <label class="file-input__label" for="file-input">
-                                    <i class="zmdi zmdi-upload zmdi-hc-2x"></i>
-                                    <span class="">
-                                        <img src="https://cdn.icon-icons.com/icons2/195/PNG/256/Excel_2013_23480.png"
-                                            width="30" height="20" alt="">
+                            <input class="form-control" type="file" id="input" accept=".xls,.xlsx">
+                            <br><br>
+                            <button class="btn btn-1" id="button" data-bs-dismiss="modal">Convert</button>
+                            <pre id="jsondata"></pre>
 
-                                    </span></label>
-                            </div>
-                            <div class="text-center mt-5">
-                                <input type="submit" name="subir" class="btn-1 btn" value="Subir Excel" />
-                            </div>
-                            </form>
+
                         </div>
+
                         <div class="col-6">
                             <form action="{{ route('addherramienta') }}" method="POST">
                                 @csrf
@@ -343,8 +261,8 @@
 
                                     <label for="exampleInputEmail1" class="form-label">Nueva herramienta</label><br>
                                     <div class="autocomplete" style="widht:500px;">
-                                        <input required id="myInput" type="text" name="nombre"
-                                            class="form-control">
+                                        <input required id="myInput" type="text" id="nombre"
+                                            oninput="myFunction(this.value)" name="nombre" class="form-control">
                                     </div>
                                 </div>
 
@@ -353,10 +271,11 @@
 
                                     <label for="exampleInputEmail1" class="form-label">unidad</label><br>
                                     <div class="autocomplete" style="widht:500px;">
-                                        <input required type="text" name="unidad" class="form-control">
+                                        <input required type="text" id="unidad" name="unidad"
+                                            class="form-control" oninput="myFunction2(this.value)">
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-1 bi ">
+                                <button type="button" id="agregar" data-bs-dismiss="modal" class="btn btn-1 bi ">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20"
                                         fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd"
@@ -406,8 +325,7 @@
     <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="cdn.datatables.net/colvis/1.1.1/js/dataTables.colVis.min.js"></script>
-    <script src="cdn.datatables.net/colvis/1.1.1/js/dataTables.colVis.js"></script>
+  
     <script src="https://cdn.datatables.net/fixedcolumns/4.2.1/js/dataTables.fixedColumns.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.colVis.min.js"></script>
@@ -419,13 +337,130 @@
     <script
         src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js">
     </script>
+
+    <script src="{{ asset('peticiones/altas_bajas.js') }}"></script>
     <script>
+        var table = null;
+        localStorage.clear();
+        let selectedFile;
+        console.log(window.XLSX);
+        document.getElementById('input').addEventListener("change", (event) => {
+            selectedFile = event.target.files[0];
+        })
+
+        let data = [{
+            "name": "jayanth",
+            "data": "scd",
+            "abc": "sdef"
+        }]
+
+
+        document.getElementById('button').addEventListener("click", () => {
+            XLSX.utils.json_to_sheet(data, 'out.xlsx');
+            if (selectedFile) {
+                let fileReader = new FileReader();
+                fileReader.readAsBinaryString(selectedFile);
+                fileReader.onload = (event) => {
+                    let data = event.target.result;
+                    let workbook = XLSX.read(data, {
+                        type: "binary"
+                    });
+                    console.log(workbook);
+                    workbook.SheetNames.forEach(sheet => {
+                        let rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
+                        new Promise(function(resolve) {
+
+                            resolve(addherramienta_excel(rowObject));
+
+                        }).then(function(result) {
+
+                            table.ajax.reload();
+
+                        })
+
+                    });
+                }
+            }
+        });
+        const button = document.getElementById('agregar');
+        button.addEventListener('click', (event) => {
+            const nombre = localStorage.getItem('nombre');
+            const unidad = localStorage.getItem('unidad');
+            addherramienta(nombre, unidad);
+            table.ajax.reload();
+
+        });
         $(document).ready(function() {
             // Setup - add a text input to each footer cell
 
 
-            var table = $('#example').DataTable({
+            table = $('#example').DataTable({
+                ajax: {
+                    "url": "http://127.0.0.1:8000/reporte_herramientas",
+                    "dataSrc": ""
+                },
+                "columns": [{
+                        data: "nombre",
 
+                    },
+                    {
+                        data: "unidad",
+
+                    },
+                    {
+                        data: "numero_serie",
+                    },
+
+                    {
+                        targets: -1,
+                        data: null,
+                        defaultContent: ` 
+                            <button type="button" role='reasignar_herramienta'  class="btn btn-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20"
+                                              fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                              <path
+                                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z">
+                                              </path>
+                                              <path fill-rule="evenodd"
+                                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z">
+                                              </path>
+                                          </svg>
+                            </button>
+                          `,
+                    },
+                ],
+                initComplete: function() {
+                    $(document).on("click", "button[role='reasignar_herramienta']", function() {
+                        var data = table.row($(this).parents('tr')).data();
+
+                        document.getElementById('contenido').innerHTML = ` 
+                         <form action="{{ route('bajaherramienta') }}" method="POST">
+              @csrf  
+              <input id="id" name="herramientas" type="hidden" value="${data.id}" >
+            <button type="button" id="eliminar" class="btn btn-danger ">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+        </svg>
+      </button>
+      
+      
+              </form>
+              `
+                        $('#exampleModal').modal('show');
+                        const button = document.getElementById('eliminar');
+
+                        button.addEventListener('click', (event) => {
+                            baja_herramienta(data.id);
+                            table.row($(this).parents('tr')).remove().draw();
+                            $('#exampleModal').modal('hide');
+
+                        });
+
+                    });
+
+
+                },
                 orderCellsTop: true,
                 fixedHeader: true,
                 language: {
@@ -460,14 +495,7 @@
                             className: 'custom-btn btn-1',
 
                         },
-                        {
-                            //definimos estilos del boton de excel
-                            extend: "colvis",
-                            text: 'COLUMNAS',
-                            className: 'custom-btn btn-1',
-
-                        },
-
+                       
 
 
                         {
@@ -494,6 +522,14 @@
 
 
                         },
+                        {
+                            text: '<i class="bi bi-plus-lg"></i>',
+                            action: function(e, dt, node, config) {
+                                $('#nuevaherramienta').modal('show');
+
+                            }
+                        }
+
 
 
                     ],

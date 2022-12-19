@@ -72,4 +72,8 @@ class Reportes extends Controller
     INNER JOIN obras on user_herramientas.obra = obras.id LEFT JOIN herramientas on user_herramientas.herramienta = herramientas.id WHERE obras.id = ?;',[$request->id]);
     return view('reportes.reporte_especifico_obra')->with(compact('reporte_obra'));
   }
+  public function reporte_herramientas(Request $request){
+    $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
+    return json_encode($herramientas);
+  }
 }
