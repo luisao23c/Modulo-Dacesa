@@ -335,13 +335,7 @@
 
                         var data = dt1.row($(this).parents('tr')).remove().draw();
                         dt.ajax.reload();
-                        fetch("http://127.0.0.1:8000/reporte_herramientas", {
-                                method: "GET"
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                              
-                            })
+                      
                         localStorage.clear();
 
 

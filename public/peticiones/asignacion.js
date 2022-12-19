@@ -11,15 +11,7 @@ function select_reload() {
       method: "GET"
     })
     .then(response => response.json())
-    .then(data => {
-      let array = data;  
-      let html = '';
-      array.forEach(element => {
-        html += "<option value=" + element.id + ">" + element.nombre + "</option>"
-
-      });
-      document.getElementById("subwaystation").innerHTML = html;
-    })
+    .then(data => {})
 }
 select_reload();
 
