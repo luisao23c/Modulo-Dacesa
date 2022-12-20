@@ -79,31 +79,29 @@ class Users extends Controller
        
          $emp = DB::select('select users.id,users.name,users.rol FROM users INNER JOIN user_herramientas on users.id = user_herramientas.user WHERE users.rol = 2 and user_herramientas.obra = ? or users.rol = 1 and user_herramientas.obra = ? group by users.name ORDER by users.rol;' , [$id_obra,$id_obra]);
          
-         
 
         return view('solicitud.vistavales')->with(compact('id_obra'))->with(compact('supervisor'))->with(compact('usersemp'))->with(compact('sup'))->with(compact('emp'))->with(compact('obra'));
 
       }
 
-      public function asignacionxusuario(Request $request,$id_usuario = null,$supervisor = null,$empleado = null,$empleadoname = null,$obra = null,$alert = null){
-        if($id_usuario>0)
-        {
-          $user = $id_usuario;
-          $sup = $supervisor;
-         $emp = $empleado;
-         $name = $empleadoname;
-         $obra = $obra;  
-         $consumer = DB::select('select id,obra,cliente from obras where obras.id = ?', [$obra]);
-        }
-        else {
+      public function table_vales($id_obra){
+        $emp = DB::select('select users.id,users.name,users.rol FROM users INNER JOIN user_herramientas on users.id = user_herramientas.user WHERE users.rol = 2 and user_herramientas.obra = ? or users.rol = 1 and user_herramientas.obra = ? group by users.name ORDER by users.rol;' , [$id_obra,$id_obra]);
+        return json_encode($emp);
+      }
+      public function table_emps($id_obra){
+        $usersemp = DB::select('select * from (select * FROM users t1 WHERE NOT EXISTS (SELECT NULL FROM user_herramientas t2 WHERE t2.user = t1.id and t2.obra = ?)
+        )as td WHERE td.rol =2;',[$id_obra]);
+        return json_encode($usersemp);
+      }
+     
+
+      public function asignacionxusuario(Request $request){
           $user = $request->id;
           $sup = $request->supervisor;
           $emp = $request->empleado;
           $name = $request->empleadoname;
           $obra = $request->obra;
           $consumer = DB::select('select id,cliente,obra from obras where obra = ?', [$obra]);
-
-        }        
         $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
         $users = DB::select('select id,name from users where id = ?', [$user]);
         foreach ($users as $key => $value) {

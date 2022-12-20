@@ -7,6 +7,7 @@ use App\Http\Controllers\CrudObras;
 use App\Http\Controllers\CrudHerramientas;
 use App\Http\Controllers\Reportes;
 use App\Http\Controllers\Login;
+use Illuminate\Foundation\Auth\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,10 @@ Route::post('/login', [Login::class, 'login'])->name('login');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/Cerrarsesion', [Login::class, 'Cerrarsesion'])->name('Cerrarsesion');
 Route::post('/addherramienta_user', [CrudHerramientas::class, 'addherramienta_user'])->name('addherramienta_user');
+//-------------------------------------Users------------------------------------------------------
+
+Route::get('/table_vales/{id_obra}', [Users::class, 'table_vales'])->name('table_vales');
+Route::get('/table_emps/{id_obra}', [Users::class, 'table_emps'])->name('table_emps');
 
 //-------------------------------------Herramientas------------------------------------------------------
 Route::post('/delete_herramientas_user', [CrudHerramientas::class, 'delete_herramientas_user'])->name('delete_herramientas_user');
