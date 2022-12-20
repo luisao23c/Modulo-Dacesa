@@ -104,7 +104,7 @@ class Users extends Controller
       } elseif($alerts == 5){
         $alerts = 5;
       }
-
+      $condicion = 0;
       
          $emp = DB::select('select users.id,users.name,users.rol FROM users INNER JOIN user_herramientas on users.id = user_herramientas.user WHERE users.rol = 2 and user_herramientas.obra = ? or users.rol = 1 and user_herramientas.obra = ? group by users.name ORDER by users.rol;' , [$id_obra,$id_obra]);
          

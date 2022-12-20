@@ -216,7 +216,8 @@
                                 <td>
                                     <form id="asignar_herramienta">
                                         @csrf
-                                        <select class="form-select"id="herramienta{{ $partida }}"
+                                        <div class="formulario_grupo">
+                                        <select class="form-select desabilitar "id="herramienta{{ $partida }}"
                                             name="herramienta">
 
                                             @foreach ($herramientas as $item)
@@ -224,7 +225,7 @@
                                                     {{ $item->numero_serie }} / {{ $item->unidad }} </option>
                                             @endforeach
                                         </select>
-
+                                        </div>
                                 </td>
                                 <input id="user{{ $partida }}" name="user" type="hidden"
                                     value="{{ $user }}">
@@ -323,6 +324,10 @@
     <script src="{{ asset('peticiones/asignacion.js') }}"></script>
 
     <script>
+$("select").on("change",function(){
+        var valor=$(this).val();
+        $("select").find("option[value='"+valor+"']").prop("disabled",true);
+    });
         localStorage.clear();
         let dt = null;
         $(document).ready(function() {

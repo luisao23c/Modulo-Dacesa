@@ -6,14 +6,6 @@ function myFunction(val) {
   localStorage.setItem('faltan', val);
 }
 
-function select_reload() {
-  fetch("http://127.0.0.1:8000/reporte_herramientas", {
-      method: "GET"
-    })
-    .then(response => response.json())
-    .then(data => {})
-}
-select_reload();
 
 
   async function asignar_herramienta(partida) {
