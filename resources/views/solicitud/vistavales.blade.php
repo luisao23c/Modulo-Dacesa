@@ -136,31 +136,10 @@ body {
       </div>
       <div class="col-1">
 
-        @if ($condicion ==  0)
-        <div class="  col-1">
-          <form action="{{ route('add_caja') }}" method="POST">
-            @csrf
-            <input id="prodId" name="sup" type="hidden" value="{{$sup}}">
-                  <input id="prodId" name="obra" type="hidden" value="{{$id_obra}}">
-            <input id="prodId" name="id" type="hidden" value="{{$supervisor}}">
-            <button type="submit" class="btn custom-icon btn-1">
-              <img width="50" height="25" src="https://openclipart.org/image/300px/svg_to_png/210207/misc-bag-toolbox-red.png" alt="">
-            </button>
-          </form>
-        </div>
-      @endif
+      
 
       </div>
-      <div class="col-1">
-        <a href="{{ route('welcome') }}">
-          <button type="button" class="btn btn-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="25" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
-              <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z"/>
-              <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
-            </svg>
-          </button>
-        </a>
-      </div>
+    
      </div>
       
         <div class="row">
@@ -433,49 +412,5 @@ $(document).ready(function () {
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-@if ($condicion == 1)
-
-<script>
-  swal({
-  title: "Solicitud aceptada",
-  text: "se ha solicitado la caja de herramientas",
-  icon: "success",
-  button: "Aceptar",
-});
-</script>
-@endif
-@if ($alerts ==  3)
-
-<script>
-  swal({
-  title: "Solicitud rechazada",
-  text: "No se puede eliminar al empleado por que tiene material que no a regresado",
-  icon: "error",
-  button: "Aceptar",
-});
-</script>
-@endif
-@if ($alerts ==  4)
-
-<script>
-swal({
-  title: "Solicitud aceptada",
-  text: "se ha eliminado al empleado de esta obra",
-  icon: "success",
-  button: "Aceptar",
-});
-</script>
-@endif
-@if ($alerts ==  5)
-
-<script>
-swal({
-  title: "Solicitud aceptada",
-  text: "se han agregdo los empleados a la obra",
-  icon: "success",
-  button: "Aceptar",
-});
-</script>
-@endif
   </body>
 </html>

@@ -55,62 +55,33 @@ class Users extends Controller
         $obra = $request->obra;
         $cliente = DB::select('select cliente from obras where obra = ?', [$obra]);
        */
-        return redirect()-> route('vistavale', [$sup,$id_obra]);
+        return redirect()-> route('vistavale', [$id_obra]);
 
       }
-      public function vistavale(Request $request,$sup,$id_obra,$condicional_existe = 0,$alerts = 0){
+      public function vistavale(Request $request,$id_obra){
+        $id = $request->session()->get('id_login');
+        foreach ($id as $key => $value) {
+            $id = $value;
+        }
         $usersemp = DB::select('select * FROM users WHERE users.rol = 2  and users.id NOT IN (SELECT user_herramientas.user FROM user_herramientas WHERE user_herramientas.obra =?  )',[$id_obra]);
         $obra = DB::select('select obra from obras where obras.id = ?', [$id_obra]); 
-        $supervisor = DB::select('select users.id from users where users.name = ?', [$sup]);
+        $supervisor = DB::select('select users.id,users.name from users where users.id = ?', [$id]);
        
         foreach ($obra as $key => $value) {
           $obra = $value->obra;
          }
          foreach ($supervisor as $key => $value) {
           $supervisor = $value->id;
+          $sup = $value->name;
          }
          
 
-         $ifcaja = DB::select('select user_herramientas.descripcion from user_herramientas where user_herramientas.user  = ? and user_herramientas.descripcion = NULL', [$supervisor]);
-         if($ifcaja == 1){
-         foreach ($ifcaja as $key=>$value) {  
-          if ($value->descripcion == "caja"){
-            $condicion = 1;
-          }
-         }
-        }
-        else{
-          $ifcaja = DB::select('select user_herramientas.descripcion from user_herramientas where user_herramientas.user  = ? and user_herramientas.descripcion IS NOT NULL', [$supervisor]);
-          if($ifcaja){
-          foreach ($ifcaja as $key=>$value) {  
-            if ($value->descripcion == "caja"){
-              $condicion = 2;
-            }
-          }
-         
-        } else{
-          $condicion = 0;
-        }
        
-      }
-      if($condicional_existe>0)
-      {
-         $condicion = 1;
-      }elseif($alerts == 3){
-        $alerts = 3;
-      }
-      elseif($alerts == 4){
-        $alerts = 4;
-      } elseif($alerts == 5){
-        $alerts = 5;
-      }
-      $condicion = 0;
-      
          $emp = DB::select('select users.id,users.name,users.rol FROM users INNER JOIN user_herramientas on users.id = user_herramientas.user WHERE users.rol = 2 and user_herramientas.obra = ? or users.rol = 1 and user_herramientas.obra = ? group by users.name ORDER by users.rol;' , [$id_obra,$id_obra]);
          
          
 
-        return view('solicitud.vistavales')->with(compact('alerts'))->with(compact('condicion'))->with(compact('id_obra'))->with(compact('supervisor'))->with(compact('usersemp'))->with(compact('sup'))->with(compact('emp'))->with(compact('obra'));
+        return view('solicitud.vistavales')->with(compact('id_obra'))->with(compact('supervisor'))->with(compact('usersemp'))->with(compact('sup'))->with(compact('emp'))->with(compact('obra'));
 
       }
 

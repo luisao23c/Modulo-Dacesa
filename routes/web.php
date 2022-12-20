@@ -52,7 +52,7 @@ Route::post('/addempleado', [Users::class, 'addempleado'])->name('addemp');
 
 Route::get('/getvales', [Users::class, 'viewvales'])->name('getvales');
 Route::post('/nuevovaleobra/{obra}', [Users::class, 'nuevovaleobra'])->name('nuevovaleobra');
-Route::get('/vistavale/{sup}/{id_obra}/{caja?}/{alert?}', [Users::class, 'vistavale'])->name('vistavale');
+Route::get('/vistavale/{id_obra}', [Users::class, 'vistavale'])->name('vistavale');
 
 
 
