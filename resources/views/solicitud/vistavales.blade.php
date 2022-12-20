@@ -307,22 +307,50 @@
                     $(document).on("click", "button[role='eliminar_user']", function() {
                         $('#exampleModal').modal('show');
                         data = dt.row($(this).parents('tr')).data();
-                        tb = dt.row($(this).parents('tr'));
                         const button = document.getElementById('eliminar');
 
                         button.addEventListener('click', (event) => {
-                          eliminar_user_obra(id, data.id);
-                        dt.ajax.reload();
-                        $('#exampleModal').modal('hide');
+                          band = false
+                            let msg = "";
+                            let object = {
+                                obra: id,
+                                user: data.id,
+
+                            };
+                            const res =  fetch(
+                                    "http://127.0.0.1:8000/eliminar_user_obra", {
+                                        method: "POST",
+                                        mode: "cors",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify(object),
+                                    }).then((response) => response.json())
+                                .then((data) => {
+                            if (!band) {
+                                band = true;
+                              if(data.msg == "no se puede debido a que ya tiene material o participo de alguna forma"){
+                                alert(data.msg);
+                              }
+                            }
+                               if(data.msg =="Se ha eliminado"){
+                                dt.row($(this).parents('tr')).remove().draw();
+
+                              }
+                              
+                           
+                                });
+                          
+                            $('#exampleModal').modal('hide');
 
                         });
-                       
+
 
                     });
                     $(document).on("click", "button[role='navegacion']", function() {
-                       alert('navegacion');
+                        alert('navegacion');
 
-                        });
+                    });
                 },
                 scrollY: "320px",
                 scrollX: true,

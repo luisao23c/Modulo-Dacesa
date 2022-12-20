@@ -17,7 +17,6 @@ async function nuevo_user(obra,user) {
 }
 async function eliminar_user_obra(obra,user) {
     let msg = "";
-    let cont = 0;
     const object = {
         obra: obra,
         user: user,

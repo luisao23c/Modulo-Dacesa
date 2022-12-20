@@ -46,7 +46,7 @@ class CrudObras extends Controller
        else {
 
         $delete = DB::delete('delete FROM user_herramientas WHERE user_herramientas.user =? and user_herramientas.obra  =?', [$request->user,$obra]);
-        $alerts =4;
+        return json_encode(["msg" => "Se ha eliminado"]);
        }
 
     }
