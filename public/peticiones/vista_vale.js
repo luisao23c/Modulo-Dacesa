@@ -17,8 +17,6 @@ async function nuevo_user(obra,user) {
 }
 async function eliminar_user_obra(obra,user) {
     let msg = "";
-    band = false
-
     let cont = 0;
     const object = {
         obra: obra,
@@ -34,6 +32,7 @@ async function eliminar_user_obra(obra,user) {
         body: JSON.stringify(object),
     }).then((response) => response.json())
     .then((data) => msg = data.msg );
+    band = false
          // tu codigo aqui 
          if(!band){
             alert(msg)

@@ -307,6 +307,7 @@
                     $(document).on("click", "button[role='eliminar_user']", function() {
                         $('#exampleModal').modal('show');
                         data = dt.row($(this).parents('tr')).data();
+                        tb = dt.row($(this).parents('tr'));
                         const button = document.getElementById('eliminar');
 
                         button.addEventListener('click', (event) => {
