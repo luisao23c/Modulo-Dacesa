@@ -211,6 +211,7 @@
                         <tr>
                             <th>Empleado</th>
                             <th>Herramienta</th>
+                            <th>codigo</th>
                             <th>Asignados</th>
                             <th>material faltante</th>
                             <th>Descripcion</th>
@@ -228,6 +229,8 @@
                {{ $item->empleado }}</td>
                 
                             <td>{{ $item->herramienta }}</td>
+                            <td>{{ $item->numero_serie }}</td>
+
                             <td>{{ $item->asignados }}</td>
                             <td>{{ $item->material_faltante }}</td>
                             <td>{{ $item->descripcion }}</td>

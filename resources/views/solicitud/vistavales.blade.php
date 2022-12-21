@@ -175,31 +175,9 @@
             </div>
         </div>
     </div>
-    <script>
-        function followUser(e) {
-            var id = e.getAttribute('data-id');
-            var sup = e.getAttribute('data-sup');
-            var obra = e.getAttribute('data-obra');
+    <div id="next_vista">
 
-            document.getElementById("contenido").innerHTML = `
-          <form action="{{ route('eliminar_user_obra') }}" method="POST">
-            @csrf
-          <input id="prodId" name="id" type="hidden" value="${id}">
-      
-                <input id="prodId" name="supervisor" type="hidden" value="${sup}">
-                <input id="prodId" name="obra" type="hidden" value="${obra}">
-              <button type="submit" class=" btn-danger btn" > 
-      
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
-                  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
-                </svg>  
-              </button>
-            </form>
-              `;
-
-        }
-    </script>
+    </div>
 
     <!-- jquery y bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -242,6 +220,8 @@
             // Setup - add a text input to each footer cell
 
             const id = <?php echo $id_obra; ?>;
+            const supervisor = <?php echo $supervisor; ?>;
+
             dt = $('#example').DataTable({
                 ajax: {
                     "url": "http://127.0.0.1:8000/table_vales/" + id,
@@ -304,20 +284,21 @@
 
                 ],
                 initComplete: function() {
+                  
                     $(document).on("click", "button[role='eliminar_user']", function() {
                         $('#exampleModal').modal('show');
                         data = dt.row($(this).parents('tr')).data();
                         const button = document.getElementById('eliminar');
 
                         button.addEventListener('click', (event) => {
-                          band = false
+                            band = false
                             let msg = "";
                             let object = {
                                 obra: id,
                                 user: data.id,
 
                             };
-                            const res =  fetch(
+                            const res = fetch(
                                     "http://127.0.0.1:8000/eliminar_user_obra", {
                                         method: "POST",
                                         mode: "cors",
@@ -327,20 +308,23 @@
                                         body: JSON.stringify(object),
                                     }).then((response) => response.json())
                                 .then((data) => {
-                            if (!band) {
-                                band = true;
-                              if(data.msg == "no se puede debido a que ya tiene material o participo de alguna forma"){
-                                alert(data.msg);
-                              }
-                            }
-                               if(data.msg =="Se ha eliminado"){
-                                dt.row($(this).parents('tr')).remove().draw();
+                                    if (!band) {
+                                        band = true;
+                                        if (data.msg ==
+                                            "no se puede debido a que ya tiene material o participo de alguna forma"
+                                            ) {
+                                            alert(data.msg);
+                                        }
+                                    }
+                                    if (data.msg == "Se ha eliminado") {
+                                        dt.row($(this).parents('tr')).remove()
+                                        .draw();
 
-                              }
-                              
-                           
+                                    }
+
+
                                 });
-                          
+
                             $('#exampleModal').modal('hide');
 
                         });
@@ -348,7 +332,20 @@
 
                     });
                     $(document).on("click", "button[role='navegacion']", function() {
-                        alert('navegacion');
+                        data = dt.row($(this).parents('tr')).data();
+                        formulario_vista = document.getElementById("formulario_vista")
+                            .innerHTML = `
+                      <input type="hidden" name="id" value="${data.id}">
+                      <input type="hidden" name="supervisor" value="${supervisor}">
+                      <input type="hidden" name="obra" value="${id}">
+                      <button type="submit"></button>
+                      `
+                        $('#formenvio_1').submit();
+
+
+                   
+
+
 
                     });
                 },
@@ -487,7 +484,6 @@
     </script>
     <!-- Button trigger modal -->
 
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -519,6 +515,28 @@
             </div>
         </div>
     </div>
+
+    <div style ="visibility: hidden" class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                      <form id="formenvio_1" action="{{ route('asignacionxusuario') }}" method="GET">
+                        <div id="formulario_vista"></div>
+                      </form>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade modal-xl" id="nuevoempleado" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">

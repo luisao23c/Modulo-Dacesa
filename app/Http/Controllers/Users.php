@@ -98,14 +98,20 @@ class Users extends Controller
       public function asignacionxusuario(Request $request){
           $user = $request->id;
           $sup = $request->supervisor;
-          $emp = $request->empleado;
-          $name = $request->empleadoname;
           $obra = $request->obra;
-          $consumer = DB::select('select id,cliente,obra from obras where obra = ?', [$obra]);
+          $user_sup = DB::select('select id,name from users where id = ?', [$sup]);
+          foreach ($user_sup as $key => $value) {
+            $sup = $value->name;
+            $emp = $value->name;
+
+           }
+          $consumer = DB::select('select id,cliente,obra from obras where id = ?', [$obra]);
         $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
         $users = DB::select('select id,name from users where id = ?', [$user]);
         foreach ($users as $key => $value) {
           $user_id = $value->id;
+          $name = $value->name;
+
          }
          foreach ($consumer as $key => $value) {
            $cliente = $value->cliente;
@@ -118,8 +124,12 @@ class Users extends Controller
           array_push($herramientas_select, $value->nombre);
         }
 
-        $herramientas_asignadas = DB::select('select user_herramientas.id,user_herramientas.cantidad,user_herramientas.herramienta,user_herramientas.descripcion,herramientas.numero_serie from user_herramientas left join herramientas on user_herramientas.herramienta = herramientas.id  WHERE user_herramientas.user = ? and  user_herramientas.obra = ?', [$user_id,$obra_id]);
-        return view('solicitud.asignacionxusuario')->with(compact('herramientas_select'))->with(compact('alert'))->with(compact('obra_id'))->with(compact('user'))->with(compact('herramientas'))->with(compact('herramientas_asignadas'))->with(compact('sup'))->with(compact('emp'))->with(compact('obra'))->with(compact('cliente'))->with(compact('name'));
+       
+        return view('solicitud.asignacionxusuario')->with(compact('herramientas_select'))->with(compact('obra_id'))->with(compact('user'))->with(compact('herramientas'))->with(compact('user_id'))->with(compact('sup'))->with(compact('emp'))->with(compact('obra'))->with(compact('cliente'))->with(compact('name'));
+      }
+      public function herramientas_asignadas_user($user_id = null,$obra_id = null){
+        $herramientas_asignadas = DB::select('select user_herramientas.id,user_herramientas.cantidad,user_herramientas.herramienta,user_herramientas.descripcion,herramientas.numero_serie from user_herramientas left join herramientas on user_herramientas.herramienta = herramientas.id  WHERE user_herramientas.user = ? and  user_herramientas.obra = ? and user_herramientas.cantidad is not null and user_herramientas.herramienta is null', [$user_id,$obra_id]);
+        return json_encode($herramientas_asignadas);
       }
       public function vistadeusuario(Request $request){
         $sup = $request->supervisor;

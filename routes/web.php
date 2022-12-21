@@ -54,11 +54,12 @@ Route::post('/addempleado', [Users::class, 'addempleado'])->name('addemp');
 Route::get('/getvales', [Users::class, 'viewvales'])->name('getvales');
 Route::post('/nuevovaleobra/{obra}', [Users::class, 'nuevovaleobra'])->name('nuevovaleobra');
 Route::get('/vistavale/{id_obra}', [Users::class, 'vistavale'])->name('vistavale');
+Route::get('/herramientas_asignadas_user/{user_id}/{obra_id}', [Users::class, 'herramientas_asignadas_user'])->name('herramientas_asignadas_user');
 
 
 
 Route::post('/addobra', [CrudObras::class, 'addobra'])->name('addobra');
-Route::get('/asignacionxusuario/{id_usuario?}/{supervisor?}/{empleado?}/{empleadoname?}/{obra?}/{alert?}', [Users::class, 'asignacionxusuario'])->name('asignacionxusuario');
+Route::get('/asignacionxusuario', [Users::class, 'asignacionxusuario'])->name('asignacionxusuario');
 Route::post('/vistadeusuario', [Users::class, 'vistadeusuario'])->name('vistadeusuario');
 
 Route::post('/eliminar_user_obra', [CrudObras::class, 'eliminar_user_obra'])->name('eliminar_user_obra');
@@ -98,7 +99,7 @@ Route::get('/reporte_herramientas',[Reportes::class, 'reporte_herramientas'])->n
 Route::get('/reporte_trabajador', [Reportes::class, 'reporte_trabajador'])->name('reporte_trabajador');
 Route::get('/reportes_supervisor/{id_obra}', function ($id_obra) {
     $obra = DB::select('select obra,cliente from obras where obras.id = ?', [$id_obra]);
-    $reporte_supervisor = DB::select('select users.name as empleado,herramientas.nombre as herramienta,user_herramientas.cantidad as asignados,user_herramientas.asignados as material_faltante,user_herramientas.descripcion FROM user_herramientas INNER join users on user_herramientas.user = users.id left JOIN herramientas on herramientas.id = user_herramientas.herramienta WHERE user_herramientas.obra = ? and user_herramientas.descripcion is not null ORDER by users.name;', [$id_obra]);
+    $reporte_supervisor = DB::select('select users.name as empleado,herramientas.nombre as herramienta,user_herramientas.cantidad as asignados,user_herramientas.asignados as material_faltante,user_herramientas.descripcion,herramientas.numero_serie FROM user_herramientas INNER join users on user_herramientas.user = users.id left JOIN herramientas on herramientas.id = user_herramientas.herramienta WHERE user_herramientas.obra = ? and user_herramientas.descripcion is not null ORDER by users.name;', [$id_obra]);
     foreach ($obra as $value) {
         $obra = $value->obra;
         $cliente = $value->cliente;

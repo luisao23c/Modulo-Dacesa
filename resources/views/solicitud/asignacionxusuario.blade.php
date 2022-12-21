@@ -38,15 +38,10 @@
 .borde2{
   background: #f2f2f2;
 }
-
 .autocomplete {
   position: relative;
   display: inline-block;
 }
-
-
-
-
 .autocomplete-items {
   position: absolute;
   border: 1px solid #d4d4d4;
@@ -58,19 +53,16 @@
   left: 0;
   right: 0;
 }
-
 .autocomplete-items div {
   padding: 10px;
   cursor: pointer;
   background-color: #fff; 
   border-bottom: 1px solid #d4d4d4; 
 }
-
 /*when hovering an item:*/
 .autocomplete-items div:hover {
   background-color: #e9e9e9; 
 }
-
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
   background-color: DodgerBlue !important; 
@@ -113,7 +105,6 @@
    4px 4px 5px 0px rgba(0,0,0,.1);
   outline: none;
 }
-
 /* 1 */
 .btn-1 {
   background: #ff4081;
@@ -128,7 +119,6 @@ background: linear-gradient(0deg,#ff4081 0%, #e7227b 100%);
  
 /* Estilos para el HEAD de la tabla */
 table.dataTable thead {background-color:#ff4081;color: azure;}
-
 /* Estilos para los botones de paginacion */
 .page-item.active .page-link {
   background-color:#ff4081 !important;
@@ -143,22 +133,13 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
     </style>
 <div class="ajustar"></div>
 <div class= "container">
-  <form  action="{{ route('addherramienta_user') }}"  method="POST" name="sample">
+  <form>
     @csrf
   <br>
   <input id="prodId" name="id" type="hidden" value="{{$user}}">
   <div class="row">
-    <div class="col-3">
-    <a href="{{ route('vistavale',['sup'=>$sup,'id_obra'=>$obra_id]) }}">
-      <button type="button" class="btn btn-1 ">
-        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="20" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-        </svg>  
-      </button>
-      
-  </a>
-    </div>
-    <div class=" offset-6 col-3">
+  
+    <div class=" offset-9 col-3">
     @php $diassemana = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
     $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
      
@@ -170,14 +151,13 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
     <div class="row">
     <div class="col-3">
     
-      <input id="prodId" name="empleadoname" type="hidden" value="{{$name}}">
-      <input id="prodId" name="empleado" type="hidden" value="{{$emp}}">
-      <input id="prodId" name="supervisor" type="hidden" value="{{$sup}}">
-      <input id="prodId" name="obra" type="hidden" value="{{$obra}}">
+
+      <input id="user_id" name="user_id" type="hidden" value="{{$user_id}}">
+      <input id="obra_id" name="obra" type="hidden" value="{{$obra_id}}">
        
       
       cantidad:<br>
-      <input required  name="cantidad"type="number" min="1" name="cantidad">
+      <input required id="cantidad"  name="cantidad"type="number" min="1" name="cantidad">
   
     </div>
     <div class="autocomplete" style="width:300px;">
@@ -190,7 +170,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
     </div>
     <div class="col-3">
       <div style="margin-top: 1rem;"></div>
-      <button type="submit" class="btn btn-1">
+      <button type="button" role="agregar" class="btn btn-1">
         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="25" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
         </svg>
@@ -223,76 +203,14 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                           <th><b>Partida</b></th> 
                           <th><b>Cantidad</b></th>
                           <th> <b>descripcion</b></th>
-                          <th> <b>Codigo</b></th>
                           <th> <b>Accion</b></th>
                             
                         </tr>
                     </thead>
                     <tbody>
-                      @php $partida = 0; $cont =0 @endphp
     
                       
-                      @foreach ($herramientas_asignadas as $item)
-                      @if( $cont > 0)
-    
-                      <tr>
-                          <td>{{$partida}}</td>
-                          <td>{{$item->cantidad}}</td>
-                          <td>{{$item->descripcion}}</td>
-                          <td>{{$item->numero_serie}}</td>
-                          @if($item->herramienta)
-                          <td>Ya fue Asignado</td>
-                          @endif
-                        @if(!$item->herramienta)
-
-                          <td>
-                            <a href="#demo-modal2" data-id_usuario ="{{$user}}"   data-supervisor="{{$sup}}"  data-empleado="{{$emp}}" data-empleadoname="{{$name}}" data-obra="{{$obra_id}}"  data-id="{{$item->id}}" onclick="followUser(this); return true;">                     
-                              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
-                                  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
-                                </svg>  
-                              </button>
-                            </a>
-                          <script>
-                         
-                            function followUser(e){
-                                var id_usuario= e.getAttribute('data-id_usuario');
-                                var supervisor = e.getAttribute('data-supervisor');
-                                var empleado = e.getAttribute('data-empleado');
-                                var empleadoname = e.getAttribute('data-empleadoname');
-                                var obra = e.getAttribute('data-obra');
-                                var id = e.getAttribute('data-id');
-                                console.log(id_usuario, supervisor, empleado, empleadoname,obra,id);
-                                document.getElementById("contenido").innerHTML = `
-                                <form action="{{ route('eliminar_peticion_herramienta') }}" method="POST">
-                              @csrf
-                              <input id="prodId" name="id_usuario" type="hidden" value="${id_usuario}">
-                              <input id="prodId" name="supervisor" type="hidden" value="${supervisor}">
-                              <input id="prodId" name="empleado" type="hidden" value="${empleado}">
-                              <input id="prodId" name="empleadoname" type="hidden" value="${empleadoname}">
-                              <input id="prodId" name="obra" type="hidden" value="${obra}">
-                              <input id="prodId" name="id" type="hidden" value="${id}">
-                                <td><button type="submit" class="btn btn-danger">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                  </svg>  
-                                </button></td>
-                  
-                          </form> 
-                         `;
-            
-                        
-                            }
-                            </script>
-                      
-                          </td>
-                      @endif
-                        </tr>
-                      @endif
-                      @php $cont = 1; $partida ++ @endphp  
-                    @endforeach
+                   
                      </tbody>      
                 </table>
             </div>
@@ -308,9 +226,16 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
           <div class="modal-body">
             <h1>Estas seguro de eliminarlo?</h1>
             <div class="mb-3">
-                            <div id="contenido"></div>
     
-                
+              <button type="button" class="btn btn-danger" id="eliminar" data-bs-dismiss="modal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z">
+                  </path>
+                  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z">
+                  </path>
+              </svg>
+              </button>
+    
           </div>
           </div>
           <div class="modal-footer">
@@ -332,14 +257,105 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
  <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+ <script src="{{ asset('peticiones/asignacionxusuario.js') }}"></script>
 
 
 <!-- Para los estilos en Excel     -->
 <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js"></script>
 <script>
+  let dt = null;
+  $(document).on("click", "button[role='agregar']", function() {
+        let descripcion = document.getElementById("myInput").value;
+        let cantidad = document.getElementById("cantidad").value;
+        let obra_id = document.getElementById("obra_id").value;
+        let user_id = document.getElementById("user_id").value;
+        if (!cantidad){
+           return alert("no se asignado una cantidad");
+        }
+        if (!descripcion){
+            return alert("no se asignado una descripcion");
+        }
+        const object = {
+            obra_id:obra_id,
+            id:user_id,
+            descripcion:descripcion,
+            cantidad:cantidad,
+        };
+     const res =  fetch("http://127.0.0.1:8000/addherramienta_user", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(object),
+    }).then((res) => res.json())
+    .then((data) => {
+    
+    });
+    dt.ajax.reload();
+    });
 $(document).ready(function () {
-    $("#myTable").DataTable({
+  const user_id = <?php echo $user_id; ?>;
+  const obra_id = <?php echo $obra_id; ?>;
+  cont = 1;
+
+  dt =  $("#myTable").DataTable({
+      ajax: {
+                    "url": "http://127.0.0.1:8000/herramientas_asignadas_user/" + user_id +"/"+ obra_id,
+                    "dataSrc": ""
+                },
+                columnDefs: [{
+                        width: 200,
+                        targets: 0
+                    },
+
+                ],
+                "columns": [{
+                        data: null,
+                        render: function(data, type, row) {
+                            return cont++;
+                        }
+                    },
+                    {
+                        data: "cantidad",
+
+                    },
+                    {
+                        data: "descripcion",
+                    },
+                   
+                   
+                    {
+                        targets: -1,
+                        data: null,
+                        defaultContent: ` 
+                            <button type="button" role='eliminar_herramienta'  class="btn btn-danger" >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z">
+                                              </path>
+                                              <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z">
+                                              </path>
+                                          </svg>
+                            </button>
+                          `,
+                    },
+                ],
+                initComplete: function() {
+                    $(document).on("click", "button[role='eliminar_herramienta']", function() {
+                      var data = dt.row($(this).parents('tr')).data();
+                      $('#exampleModal').modal('show');
+                      const button = document.getElementById('eliminar');
+
+                        button.addEventListener('click', (event) => {
+                          delete_herramientas_user(data.id);
+                          dt.row($(this).parents('tr')).remove().draw();
+
+                        });
+                      // 
+                    });
+
+                },
       pageLength: 3,
      
      scrollY:        "180px",
@@ -362,28 +378,7 @@ $(document).ready(function () {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
 
-    @if ($alert == 1)
-
-    <script>
-      swal({
-      title: "Solicitud aceptada",
-      text: "se ha agregado su peticion",
-      icon: "success",
-      button: "Aceptar",
-    });
-    </script>
-    @endif
-    @if ($alert == 2)
-    
-    <script>
-      swal({
-      title: "Solicitud aceptada",
-      text: "se ha eliminado su peticion",
-      icon: "success",
-      button: "Aceptar",
-    });
-    </script>
-    @endif
+   
     </html>
     <script>
     function autocomplete(inp, arr) {

@@ -12,24 +12,20 @@ class CrudHerramientas extends Controller
 {
   public function addherramienta_user(Request $request)
   {
-
-    $obra = $request->obra;
-    $consumer = DB::select('select id,obra,cliente from obras where obra = ?', [$obra]);
-    if (count($consumer) == 0) {
-      $consumer = DB::select('select id,obra,cliente from obras where obras.id = ?', [$obra]);
-    }
+    $obra = $request->obra_id;
+    $consumer = DB::select('select id,obra,cliente from obras where obras.id = ?', [$obra]);
+    
     foreach ($consumer as $key => $value) {
       $cliente = $value->cliente;
       $obra_id = $value->id;
       $obra_metodo = $value->obra;
     }
     $id_user_herramientas = DB::select('select id from user_herramientas where  user_herramientas.user= ? and  user_herramientas.obra= ? ', [$request->id, $obra_id]);
-
     foreach ($id_user_herramientas as $key => $value) {
       $id_user_herramientas = $value->id;
     }
-    $asignacion_herramienta = User_herramientas::find($id_user_herramientas);
 
+    $asignacion_herramienta = User_herramientas::find($id_user_herramientas);
     $obra = $asignacion_herramienta->obra;
 
 
@@ -43,18 +39,7 @@ class CrudHerramientas extends Controller
 
     $asignacion_herramienta->cantidad = $request->cantidad;
     $asignacion_herramienta->save();
-    $user = $request->id;
-    $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
-    $users = DB::select('select id,name from users where id = ?', [$request->id]);
-    foreach ($users as $key => $value) {
-      $user_id = $value->id;
-    }
-    $sup = $request->supervisor;
-    $emp = $request->empleado;
-    $name = $request->empleadoname;
-
-    $alert = 1;
-    return redirect()->route('asignacionxusuario', [$user_id, $request->supervisor, $request->empleado, $request->empleadoname, $obra_id, $alert]);
+    
   }
   public function add_caja(Request $request)
   {
@@ -122,8 +107,7 @@ class CrudHerramientas extends Controller
   {
     $herramienta = User_herramientas::find($request->id);
     $herramienta->delete();
-    $alert = 2;
-    return redirect()->route('asignacionxusuario', [$request->id_usuario, $request->supervisor, $request->empleado, $request->empleadoname, $request->obra, $alert]);
+    
   }
   public function solicitudes_faltantes($id = NULL){
     $solicitud_faltante = DB::select('select users.id,user_herramientas.id,herramientas.id AS herramienta,descripcion,cantidad,asignados,users.name,herramientas.nombre,herramientas.numero_serie,herramientas.unidad FROM user_herramientas INNER JOIN users on user_herramientas.user = users.id INNER JOIN herramientas on user_herramientas.herramienta = herramientas.id WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.user= ? and  user_herramientas.asignados IS NOT NULL  and  user_herramientas.reporte  IS  NULL', [$id]);

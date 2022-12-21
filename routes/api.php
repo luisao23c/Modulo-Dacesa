@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CrudObras;
+use App\Http\Controllers\Users;
+use App\Http\Controllers\CrudHerramientas;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +20,5 @@ use App\Http\Controllers\CrudObras;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/asignacionxusuario', [Users::class, 'asignacionxusuario'])->name('asignacionxusuario');
+Route::post('/addherramienta_user', [CrudHerramientas::class, 'addherramienta_user'])->name('addherramienta_user');
