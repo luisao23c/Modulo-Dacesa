@@ -57,7 +57,8 @@
                 <li><a class="dropdown-item" href="{{ route('reporte_herramienta') }}">Reporte de herramientas</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item"href="{{ route('reporte_obra') }}">Reporte por obra</a></li>
-                
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item"href="{{ route('reporte_vales') }}">Reportes por vales</a></li>
               </ul>
             </li>
             <li class="nav-item">

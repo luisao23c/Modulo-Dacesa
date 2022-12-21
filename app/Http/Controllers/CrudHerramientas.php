@@ -118,6 +118,17 @@ class CrudHerramientas extends Controller
 
   public function solicitud(Request $request, $id = null)
   {
+    $vale = DB::select("select MAX(vale) as vale from user_herramientas group by vale;");
+
+    foreach ($vale as $key => $value) {
+     $vale = $value->vale;
+    }
+    if($vale == null) {
+      $vale = 1;
+     }
+     else{
+      $vale ++;
+     }
     if ($id > 0) {
       $solicitud = DB::select('select users.id,user_herramientas.id,descripcion,cantidad,asignados,users.name FROM user_herramientas INNER JOIN users on user_herramientas.user = users.id WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.user= ? and  user_herramientas.herramienta IS  NULL and  user_herramientas.reporte  IS  NULL', [$id]);
       $solicitud_faltante = DB::select('select users.id,user_herramientas.id,herramientas.id AS herramienta,descripcion,cantidad,asignados,users.name,herramientas.nombre,herramientas.numero_serie,herramientas.unidad FROM user_herramientas INNER JOIN users on user_herramientas.user = users.id INNER JOIN herramientas on user_herramientas.herramienta = herramientas.id WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.user= ? and  user_herramientas.asignados IS NOT NULL  and  user_herramientas.reporte  IS  NULL', [$id]);
@@ -140,16 +151,11 @@ class CrudHerramientas extends Controller
       $id_faltante = $value->id;
     }
     $user = $request->id;
+   
+
     $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
-        return view('asignacion.asignar_herramientas')->with(compact('id_faltante'))->with(compact('name_faltante'))->with(compact('solicitud_faltante'))->with(compact('id'))->with(compact('name'))->with(compact('solicitud'))->with(compact('herramientas'))->with(compact('user'));
-    $usuario = array();
-    $id =["id" => $id];
-    $name=["name" => $name];
-    $name_faltante=["name_faltante" => $name_faltante];
-    $user=["user" => $user];
-    $id_faltante=["id_faltante" => $id_faltante];
-    array_push($usuario,$user,$name,$name_faltante,$user,$id_faltante);
-    return json_encode([$solicitud_faltante, $solicitud,$herramientas,$usuario]);
+        return view('asignacion.asignar_herramientas')->with(compact('id_faltante'))->with(compact('name_faltante'))->with(compact('solicitud_faltante'))->with(compact('id'))->with(compact('name'))->with(compact('solicitud'))->with(compact('herramientas'))->with(compact('user'))->with(compact('vale'));
+
 
   }
   public function asignar_herramienta(Request $request)
@@ -163,6 +169,7 @@ class CrudHerramientas extends Controller
         $total = $request->faltan;
         $herramienta->asignados = $total;
         $herramienta->herramienta = $request->herramienta;
+        $herramienta->vale = $request->vale;
         $herramienta->update();
         $herramienta_table = herramientas::find($request->herramienta);
         $herramienta_table->estado = 2;
@@ -171,6 +178,8 @@ class CrudHerramientas extends Controller
     } else {
       $herramienta->asignados = NULL;
       $herramienta->herramienta = $request->herramienta;
+      $herramienta->vale = $request->vale;
+
      $herramienta->update();
       $herramienta_table = herramientas::find($request->herramienta);
 
@@ -194,6 +203,8 @@ class CrudHerramientas extends Controller
       $herramienta->cantidad = $total;
       $total = $request->faltan;
       $herramienta->asignados = $asignados_pasados;
+      $herramienta->vale = $request->vale;
+
       $herramienta->update();
       $herramienta_table = herramientas::find($request->herramienta);
       $herramienta_table->estado = 2;
@@ -202,6 +213,7 @@ class CrudHerramientas extends Controller
 
       $asignados_pasados = $herramienta->asignados + $request->faltan;
       $herramienta->cantidad = $asignados_pasados;
+      $herramienta->vale = $request->vale;
       $herramienta->asignados = NULL;
       
       $herramienta->update();
@@ -210,11 +222,7 @@ class CrudHerramientas extends Controller
        $herramienta_table->update();
     }
 
-     $solicitud_faltante = DB::select('select users.id,user_herramientas.id,herramientas.id AS herramienta,descripcion,cantidad,asignados,users.name,herramientas.nombre,herramientas.numero_serie,herramientas.unidad FROM user_herramientas INNER JOIN users on user_herramientas.user = users.id INNER JOIN herramientas on user_herramientas.herramienta = herramientas.id WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.user= ? and  user_herramientas.asignados IS NOT NULL  and  user_herramientas.reporte  IS  NULL', [$request->user]);
-    $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
-     $user =["user" => $request->user];
-     $usuario = array();
-     array_push($usuario,$user);
+    
      
   }
   public function reparacion(Request $request){

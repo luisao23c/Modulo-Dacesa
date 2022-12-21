@@ -20,5 +20,5 @@ use App\Http\Controllers\CrudHerramientas;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/asignacionxusuario', [Users::class, 'asignacionxusuario'])->name('asignacionxusuario');
-Route::post('/addherramienta_user', [CrudHerramientas::class, 'addherramienta_user'])->name('addherramienta_user');
+Route::get('/vistavale', [Users::class, 'vistavale'])->name('vistavale');
+Route::get('/solicitud/{id?}', [CrudHerramientas::class, 'solicitud'])->name('solicitud');

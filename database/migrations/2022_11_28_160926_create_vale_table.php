@@ -13,13 +13,7 @@ class CreateValeTable extends Migration
      */
     public function up()
     {
-        Schema::create('vale', function (Blueprint $table) {
-            $table->id();
-            $table->integer('numero_vale');
-            $table->unsignedBigInteger('user_herramientas')->unsigned()->nullable();
-            $table->foreign('user_herramientas')->references('id')->on('user_herramientas')->onDelete('cascade');
-            $table->timestamps();
-        });
+       
     }
 
     /**

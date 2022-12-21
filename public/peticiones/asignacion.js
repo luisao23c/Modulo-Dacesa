@@ -8,12 +8,14 @@ function myFunction(val) {
 
 
 
-  async function asignar_herramienta(partida) {
+  async function asignar_herramienta(partida,num_vale) {
     const herramienta = document.getElementById("herramienta" + partida).value;
     const user = document.getElementById("user" + partida).value;
     const ide = document.getElementById("id" + partida).value;
     const cantidad = document.getElementById("cantidad" + partida).value;
     const faltan = document.getElementById("faltan" + partida).value;
+    const vale = num_vale;
+
     console.log(faltan + "-- " + cantidad );
     const f = parseInt(faltan);
     const c = parseInt(cantidad);
@@ -29,6 +31,8 @@ function myFunction(val) {
         cantidad: cantidad,
         faltan: faltan,
         herramienta: herramienta,
+        vale: vale,
+
     };
 
     const res = await fetch("asignar_herramienta", {

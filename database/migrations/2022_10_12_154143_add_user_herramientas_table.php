@@ -26,6 +26,7 @@ class AddUserHerramientasTable extends Migration
             $table->text('descripcion')->nullable();
             $table->text('observacion')->nullable();
             $table->integer('reporte')->nullable();
+            $table->integer('vale')->nullable();
 
             $table->timestamps();
         });

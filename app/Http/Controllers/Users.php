@@ -59,6 +59,7 @@ class Users extends Controller
 
       }
       public function vistavale(Request $request,$id_obra){
+    
         $id = $request->session()->get('id_login');
         foreach ($id as $key => $value) {
             $id = $value;
@@ -78,8 +79,8 @@ class Users extends Controller
 
        
          $emp = DB::select('select users.id,users.name,users.rol FROM users INNER JOIN user_herramientas on users.id = user_herramientas.user WHERE users.rol = 2 and user_herramientas.obra = ? or users.rol = 1 and user_herramientas.obra = ? group by users.name ORDER by users.rol;' , [$id_obra,$id_obra]);
+      
          
-
         return view('solicitud.vistavales')->with(compact('id_obra'))->with(compact('supervisor'))->with(compact('usersemp'))->with(compact('sup'))->with(compact('emp'))->with(compact('obra'));
 
       }

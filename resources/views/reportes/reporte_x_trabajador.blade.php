@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.5.0/css/select.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="style.css">
-    <title>Reporte</title>
+    <title > Reporte de :{{$nombre}}  </title>
 
 </head>
 <body>

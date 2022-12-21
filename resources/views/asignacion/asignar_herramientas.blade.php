@@ -162,7 +162,12 @@
     <div class="container shadow-lg p-3 mb-5 mt-5 bg-body rounded">
         <div class="row">
             <div class="col-2">
-               
+                <a href="{{ route('vale_imprimir',['vale'=>$vale,'user'=>$user]) }}">
+                    <button type="button" class="btn btn-1 ">
+                        <i class="bi bi-printer-fill"></i> {{ $vale }}
+                    </button>
+                    
+                </a>
             </div>
             <div class=" offset-2 col-6">
                 @if (strlen($name) > 0)
@@ -314,8 +319,7 @@
         src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js">
     </script>
     <script src="{{ asset('peticiones/asignacion.js') }}"></script>
-
-    <script>
+<script>
 $("select").on("change",function(){
         var valor=$(this).val();
         $("select").find("option[value='"+valor+"']").prop("disabled",true);
@@ -328,7 +332,8 @@ $("select").on("change",function(){
                 initComplete: function() {
                     $(document).on("click", "button[role='agregar_herramienta']", function() {
                         id = localStorage.getItem('id');
-                        asignar_herramienta(id);
+                        let vale = <?php echo $vale; ?>;
+                        asignar_herramienta(id,vale);
 
                         var data = dt1.row($(this).parents('tr')).remove().draw();
                         dt.ajax.reload();
@@ -421,6 +426,8 @@ $("select").on("change",function(){
                         var temp = dt.row(idx).data();
                         const herramienta = datos.herramienta;
                         const user = <?php echo $user; ?>;
+                        const num_vale = <?php echo $vale; ?>;
+
                         const ide = datos.id;
                         let cantidad = null;
                         cantidad = datos.cantidad;
@@ -435,6 +442,7 @@ $("select").on("change",function(){
                             cantidad: cantidad,
                             faltan: faltan,
                             herramienta: herramienta,
+                            vale: num_vale,
                         };
 
 

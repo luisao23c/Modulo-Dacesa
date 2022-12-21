@@ -45,7 +45,14 @@ Route::get('/asignacion', function () {
     $users = DB::select('select users.id,users.name FROM users INNER JOIN user_herramientas on users.id = user_herramientas.user WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.herramienta IS NULL OR user_herramientas.asignados IS NOT NULL and user_herramientas.herramienta iS NOT NULL  and  user_herramientas.reporte  IS  NULL GROUP by users.name');
     return view('asignacion.solicitudes')->with(compact('users'));
 })->name('asignacion');
+Route::get('/reporte_vales', function () {
+    $reporte = DB::select('select users.id,users.name,user_herramientas.vale,obras.cliente FROM user_herramientas INNER JOIN users on users.id = user_herramientas.user INNER JOIN obras on obras.id = user_herramientas.obra GROUP by user_herramientas.vale;
+    ');
+    $vale = 0;
+    $user = 0;
 
+    return view('reportes.reporte_vales')->with(compact('reporte'))->with(compact('vale'))->with(compact('user'));
+})->name('reporte_vales');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/addsupervisor', [Users::class, 'addsupervisor'])->name('adds');
@@ -95,6 +102,8 @@ Route::post('/add_caja', [CrudHerramientas::class, 'add_caja'])->name('add_caja'
 
 //-------------------------------------REPORTES------------------------------------------------------
 Route::get('/reporte_herramientas',[Reportes::class, 'reporte_herramientas'])->name('reporte_herramientas');
+Route::get('/vale_imprimir/{vale}/{user}',[Reportes::class, 'vale_imprimir'])->name('vale_imprimir');
+Route::post('/vale_print',[Reportes::class, 'vale_print'])->name('vale_print');
 
 Route::get('/reporte_trabajador', [Reportes::class, 'reporte_trabajador'])->name('reporte_trabajador');
 Route::get('/reportes_supervisor/{id_obra}', function ($id_obra) {
