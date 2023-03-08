@@ -83,7 +83,6 @@
                     <thead class=" borde_table ">
                         <tr>
                           <th><b>Partida</b></th> 
-                          <th><b>Cantidad</b></th>
                           <th> <b>unidad</b></th>
                           <th> <b>Descripcion del Articulo</b></th>
                             
@@ -96,7 +95,6 @@
                       @foreach ($reporte_vale as $item)
                       <tr>
                           <td>{{$partida}}</td>
-                          <td>{{$item->cantidad}}</td>
                           <td>{{$item->unidad}}</td>
                           <td>{{$item->nombre}}</td>
                         </tr>

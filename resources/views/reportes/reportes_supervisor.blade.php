@@ -212,8 +212,6 @@
                             <th>Empleado</th>
                             <th>Herramienta</th>
                             <th>codigo</th>
-                            <th>Asignados</th>
-                            <th>material faltante</th>
                             <th>Descripcion</th>
                         </tr>
                     </thead>
@@ -231,8 +229,6 @@
                             <td>{{ $item->herramienta }}</td>
                             <td>{{ $item->numero_serie }}</td>
 
-                            <td>{{ $item->asignados }}</td>
-                            <td>{{ $item->material_faltante }}</td>
                             <td>{{ $item->descripcion }}</td>
                             </tr>
 
@@ -292,8 +288,14 @@
                 select: true,
 
                 language: {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-                },
+          "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+          searchPanes: {
+                clearMessage: 'Limpiar Filtros',
+                collapseMessage: "Colapasar",
+                showMessage:"Ver Filtros",
+                title:"Filtros Activos",
+            }
+      },
                 pageLength: 4,
                 searchPanes: {
                     viewTotal: true,

@@ -187,10 +187,8 @@
                         <thead>
                             <tr>
                                 <th>Partida</th>
-                                <th>Cantidad</th>
                                 <th> Descripcion</th>
                                 <th>Articulo / No.Serie / Unidad</th>
-                                <th> Si faltaron ingresa la cantidad</th>
                                 <th> Accion</th>
                             </tr>
                         </thead>
@@ -208,7 +206,6 @@
 
 
                                 <td>{{ $partida }}</td>
-                                <td>{{ $items->cantidad }}</td>
                                 <td>{{ $items->descripcion }}</td>
                                 <td>
                                     <form id="asignar_herramienta">
@@ -231,8 +228,6 @@
                                 <input id="cantidad{{ $partida }}" name="cantidad" type="hidden"
                                     value="{{ $items->cantidad }}">
 
-                                <td><input id="faltan{{ $partida }}" type="number" name="faltan" id="">
-                                </td>
 
                                 <td id="td{{ $partida }}">
 
@@ -262,34 +257,7 @@
     </div>
 
 
-    <div class="container shadow-lg p-3 mb-5 mt-5 bg-body rounded">
-
-        <div class="row">
-            <div id="tabla_asignacion" class="col">
-                <div class="table-responsive">
-                    <table id="myTable2" class="table table-bordered ">
-                        <thead>
-                            <th>Partida</th>
-                            <th>Cantidad</th>
-                            <th> Descripcion</th>
-                            <th>Articulo / No.Serie / Unidad</th>
-                            <th> ingresa la cantidad</th>
-                            <th> Accion</th>
-
-                        </thead>
-
-                        <tbody id="reasignacion">
-                            <br>
-
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-
-        </div>
-    </div>
+   
     </div>
     </div>
 
@@ -311,6 +279,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Para los estilos en Excel     -->
     <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js">
@@ -331,11 +300,27 @@ $("select").on("change",function(){
 
                 initComplete: function() {
                     $(document).on("click", "button[role='agregar_herramienta']", function() {
+                        let data = dt1.row($(this).parents('tr')).data();
                         id = localStorage.getItem('id');
                         let vale = <?php echo $vale; ?>;
                         asignar_herramienta(id,vale);
+                        const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
 
-                        var data = dt1.row($(this).parents('tr')).remove().draw();
+Toast.fire({
+  icon: 'success',
+  title: 'Se ha asiganado la herramienta ' + data[1],
+})
+                         data = dt1.row($(this).parents('tr')).remove().draw();
                         dt.ajax.reload();
                       
                         localStorage.clear();
@@ -367,116 +352,9 @@ $("select").on("change",function(){
 
         });
 
-        $(document).ready(function() {
-            const id = <?php echo $user; ?>;
-            cont = 1;
-            dt = $("#myTable2").DataTable({
-                ajax: {
-                    "url": "http://127.0.0.1:8000/solicitudes_faltantes/" + id,
-                    "dataSrc": ""
-                },
-                columnDefs: [{
-                        width: 200,
-                        targets: 0
-                    },
+       
 
-                ],
-                "columns": [{
-                        data: null,
-                        render: function(data, type, row) {
-                            return cont++;
-                        }
-                    },
-                    {
-                        data: "cantidad",
-
-                    },
-                    {
-                        data: "descripcion",
-                    },
-                    {
-                        data: "nombre",
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, row) {
-                            return '<input  type="number" placeholder=""  oninput="myFunction(this.value)" value="" id="faltan" name="faltan"> ';
-                        }
-                    },
-                    {
-                        targets: -1,
-                        data: null,
-                        defaultContent: ` 
-                            <button type="button" role='reasignar_herramienta'  class="btn btn-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20"
-                                            fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd"
-                                                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z" />
-                                        </svg>
-                            </button>
-                          `,
-                    },
-                ],
-                initComplete: function() {
-                    $(document).on("click", "button[role='reasignar_herramienta']", function() {
-
-                        var datos = dt.row($(this).parents('tr')).data();
-                        var data = dt.row($(this).parents('tr'));
-                        var idx = dt.row(data).index();
-                        var temp = dt.row(idx).data();
-                        const herramienta = datos.herramienta;
-                        const user = <?php echo $user; ?>;
-                        const num_vale = <?php echo $vale; ?>;
-
-                        const ide = datos.id;
-                        let cantidad = null;
-                        cantidad = datos.cantidad;
-                        const faltan = localStorage.getItem('faltan');
-
-                        if (faltan <= 0) {
-                            return alert("Debes agregar un valor");
-                        }
-                        const object = {
-                            id: ide,
-                            user: user,
-                            cantidad: cantidad,
-                            faltan: faltan,
-                            herramienta: herramienta,
-                            vale: num_vale,
-                        };
-
-
-                        const res = fetch("reasignar_herramienta", {
-                            method: "POST",
-                            mode: "cors",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(object),
-                        });
-                        dt.ajax.reload();
-                        localStorage.clear();
-                    });
-
-                },
-                language: {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-                },
-                pageLength: 2,
-
-                scrollY: "400px",
-                scrollX: true,
-                scrollCollapse: true,
-                paging: true,
-
-                dom: '<"row" B> <"row"<"col-md-6 "l> <"col-md-6"f> > rt <"row"<"col-md-6 "i> <"col-md-6"p> >',
-                buttons: {
-
-                    buttons: []
-                }
-            });
-
-        });
+    
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">

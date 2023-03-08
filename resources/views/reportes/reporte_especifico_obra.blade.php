@@ -197,7 +197,6 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                             <th >Articulo </th>
                             <th >Numero serie</th>
                             <th >Unidad</th>
-                            <th >Cantidad </th>
                             <th >Descripcion</th>
                             <th >Observaciones</th>
 
@@ -205,6 +204,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                     </thead>
                     <tbody class=" align-middle">
     @foreach($reporte_obra as $item)
+        @if($item->descripcion != "")
               <tr>
                 <td>{{$item->name}}</td>
                 <td>{{$item->obra}}</td>
@@ -212,12 +212,11 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                 <td >{{$item->nombre}}</td>
                 <td >{{$item->numero_serie}}</td>
                 <td >{{$item->unidad}}</td>
-                <td>{{$item->cantidad}}</td>
                 <td>{{$item->descripcion}}</td>
                 <td>{{$item->observacion}}</td>
 
             </tr>
-            
+      @endif       
             
             
     @endforeach
@@ -270,12 +269,18 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
           select: true,
        
           language: {
-              "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-          },
+          "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+          searchPanes: {
+                clearMessage: 'Limpiar Filtros',
+                collapseMessage: "Colapasar",
+                showMessage:"Ver Filtros",
+                title:"Filtros Activos",
+            }
+      },
           pageLength: 4,
           searchPanes: {
               viewTotal: true,
-              columns: [0,1,2,3,5,7,8]
+              columns: [0,1,2,3,5,7]
           },
         scrollY:        "320px",
        scrollX:        true,
@@ -363,7 +368,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                             ],
                             combiner: 'and'
                         },
-                        targets: [7]
+                        targets: [5]
                     },
              
            

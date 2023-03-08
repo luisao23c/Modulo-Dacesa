@@ -189,6 +189,7 @@
     <!-- datatables con bootstrap -->
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Para usar los botones -->
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
@@ -215,6 +216,7 @@
     </script>
     <script src="{{ asset('peticiones/vista_vale.js') }}"></script>
     <script>
+        let name = null;
         let dt = null;
         $(document).ready(function() {
             // Setup - add a text input to each footer cell
@@ -288,9 +290,10 @@
                     $(document).on("click", "button[role='eliminar_user']", function() {
                         $('#exampleModal').modal('show');
                         data = dt.row($(this).parents('tr')).data();
+                        name = data.name;
                         const button = document.getElementById('eliminar');
-
                         button.addEventListener('click', (event) => {
+                            
                             band = false
                             let msg = "";
                             let object = {
@@ -308,15 +311,43 @@
                                         body: JSON.stringify(object),
                                     }).then((response) => response.json())
                                 .then((data) => {
+                                    const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter',
+                                        Swal.stopTimer)
+                                    toast.addEventListener('mouseleave',
+                                        Swal.resumeTimer)
+                                }
+                            })
                                     if (!band) {
                                         band = true;
                                         if (data.msg ==
                                             "no se puede debido a que ya tiene material o participo de alguna forma"
                                             ) {
-                                            alert(data.msg);
+                                            Toast.fire({
+                                icon: 'error',
+                                title:  data.msg,
+                            })
+
                                         }
                                     }
+                                    if(band){
+                                        
+                                    }
                                     if (data.msg == "Se ha eliminado") {
+                                 
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'se ha eliminado de la obra a ' + name,
+                            })
+
+
                                         dt.row($(this).parents('tr')).remove()
                                         .draw();
 
@@ -444,6 +475,22 @@
                 initComplete: function() {
                     $(document).on("click", "button[role='agregar_empleado']", function() {
                         var data = table.row($(this).parents('tr')).data();
+                        const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+Toast.fire({
+  icon: 'success',
+  title: "se agrego a la obra " + data.name
+})
                         nuevo_user(id, data.id);
                         table.row($(this).parents('tr')).remove().draw();
                         dt.ajax.reload();
@@ -456,7 +503,7 @@
                 language: {
                     "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
                 },
-                pageLength: 4,
+                pageLength: 3,
                 columnDefs: [{
                         target: 1,
                         visible: false,
@@ -510,7 +557,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
                 </div>
             </div>
         </div>
@@ -531,7 +578,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
                 </div>
             </div>
         </div>
@@ -565,7 +612,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
                 </div>
             </div>
         </div>

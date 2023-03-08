@@ -173,9 +173,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                             <th>Descripcion</th>
                             <th>observacion</th>
 
-                            <th>Asignados</th>
-                            <th>Faltantes</th>
-
+                          
                         </tr>
                     </thead>
                     <tbody class=" align-middle">
@@ -185,8 +183,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                 <td>{{$item->obra}}</td>
                 <td>{{$item->descripcion}}</td>
                 <td>{{$item->observacion}}</td>
-                <td>{{$item->cantidad}}</td>
-                <td>{{$item->asignados}}</td>
+             
         
                     
                     

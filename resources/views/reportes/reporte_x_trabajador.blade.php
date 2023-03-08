@@ -231,7 +231,6 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                           <th>Articulo</th>
                           <th> No.Serie </th>
                           <th>Unidad</th>
-                          <th>cantidad</th>
                           <th>Fecha de pedido</th>
                           <th>Dias Transcurridos</th>
                     
@@ -285,12 +284,7 @@ else if ($transcurso_dias >=60) {
  
   
   <td>{{$items->unidad}}</td>
-  @if ($items->asignados>0)
-  <td>{{$items->asignados}}</td>
-  @endif
-  @if ($items->asignados==null)
-  <td>{{$items->cantidad}}</td>
-  @endif
+ 
   <td>{{$items->created_at}}</td>
   @if ($items->estado==1)
           <td>Ya se encuentra en almacen</td>
@@ -355,7 +349,7 @@ else if ($transcurso_dias >=60) {
     function( settings, data, dataIndex ) {
         var min = minDate.val();
         var max = maxDate.val();
-        var date = new Date( data[6] );
+        var date = new Date( data[5] );
 
 
         if (
@@ -372,8 +366,7 @@ else if ($transcurso_dias >=60) {
 $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
    var mindias = parseInt($('#mindias').val(), 10);
    var maxdias = parseInt($('#maxdias').val(), 10);
-   var Dias = parseFloat(data[7]) || 0; // use data for the age column
-console.log(mindias);
+   var Dias = parseFloat(data[6]) || 0; // use data for the age column
    if (
        (isNaN(mindias) && isNaN(maxdias)) ||
        (isNaN(mindias) && Dias <= maxdias) ||
@@ -405,12 +398,18 @@ console.log(mindias);
       select: true,
 
       language: {
-          "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+          "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+          searchPanes: {
+                clearMessage: 'Limpiar Filtros',
+                collapseMessage: "Colapasar",
+                showMessage:"Ver Filtros",
+                title:"Filtros Activos",
+            }
       },
       pageLength: 4,
       searchPanes: {
           viewTotal: true,
-          columns: [6]
+          columns: [5]
       },
     scrollY:        "320px",
    scrollX:        true,
@@ -486,25 +485,25 @@ console.log(mindias);
                             options: [{
                                     label: ' menores a 30 dias',
                                     value: function(rowData, rowIdx) {
-                                        return rowData[6] < 30;
+                                        return rowData[5] < 30;
                                     }
                                 },
                                 {
                                     label: '30 a 60 dias',
                                     value: function(rowData, rowIdx) {
-                                        return rowData[6] >= 30 && rowData[7] <= 60;
+                                        return rowData[5] >= 30 && rowData[6] <= 60;
                                     }
                                 },
                                 {
                                     label: 'mayor 60 dias',
                                     value: function(rowData, rowIdx) {
-                                        return rowData[6] >=60;
+                                        return rowData[5] >=60;
                                     }
                                 }
                             ],
                             combiner: 'and'
                         },
-                        targets: [6]
+                        targets: [5]
                     }, 
        
       ],

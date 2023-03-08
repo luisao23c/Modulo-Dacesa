@@ -260,8 +260,14 @@ $(document).ready(function() {
         fixedHeader: true,
         select: true,
         language: {
-            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-        },
+          "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+          searchPanes: {
+                clearMessage: 'Limpiar Filtros',
+                collapseMessage: "Colapasar",
+                showMessage:"Ver Filtros",
+                title:"Filtros Activos",
+            }
+      },
         pageLength: 4,
         searchPanes: {
             viewTotal: true,

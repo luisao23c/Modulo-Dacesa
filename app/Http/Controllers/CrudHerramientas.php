@@ -35,9 +35,8 @@ class CrudHerramientas extends Controller
 
     $asignacion_herramienta->user = $request->id;
     $asignacion_herramienta->descripcion = $request->descripcion;
-    $asignacion_herramienta->asignados = 0;
 
-    $asignacion_herramienta->cantidad = $request->cantidad;
+    $asignacion_herramienta->cantidad =1;
     $asignacion_herramienta->save();
     
   }
@@ -53,18 +52,8 @@ class CrudHerramientas extends Controller
   {
     $herramienta = new herramientas();
     $herramienta->nombre = $request->nombre;
-    $idfinal_herramienta = DB::select('select MAX(id) AS id FROM herramientas');
-    if ($idfinal_herramienta) {
-      foreach ($idfinal_herramienta as $key => $value) {
-        $idfinal_herramienta = $value->id;
-      }
-      $herramienta->numero_serie = $idfinal_herramienta + 1;
-    } else {
-      $herramienta->numero_serie = 1;
-    }
-
     $herramienta->unidad = $request->unidad;
-
+    $herramienta->numero_serie = $request->	numero_serie;
     $herramienta->estado = 1;
     $herramienta->save();
     return redirect()->route('altas_bajas');
@@ -160,22 +149,7 @@ class CrudHerramientas extends Controller
   }
   public function asignar_herramienta(Request $request)
   {
-
     $herramienta = User_herramientas::find($request->id);
-    if ($request->faltan) {
-      if ($request->cantidad - $request->faltan > 0) {
-        $total = $request->cantidad - $request->faltan;
-        $herramienta->cantidad = $total;
-        $total = $request->faltan;
-        $herramienta->asignados = $total;
-        $herramienta->herramienta = $request->herramienta;
-        $herramienta->vale = $request->vale;
-        $herramienta->update();
-        $herramienta_table = herramientas::find($request->herramienta);
-        $herramienta_table->estado = 2;
-        $herramienta_table->update();
-      }
-    } else {
       $herramienta->asignados = NULL;
       $herramienta->herramienta = $request->herramienta;
       $herramienta->vale = $request->vale;
@@ -185,7 +159,8 @@ class CrudHerramientas extends Controller
 
       $herramienta_table->estado = 2;
    $herramienta_table->update();
-    }
+   
+  
     $solicitud = DB::select('select users.id,user_herramientas.id,descripcion,cantidad,asignados,users.name FROM user_herramientas INNER JOIN users on user_herramientas.user = users.id WHERE user_herramientas.cantidad IS NOT NULL and user_herramientas.user= ? and  user_herramientas.herramienta IS  NULL  and  user_herramientas.reporte  IS  NULL', [$request->user]);
     $herramientas = DB::select('select * from herramientas  where estado = ?', [1]);
      $user =["user" => $request->user];

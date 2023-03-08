@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Altas/Bajas</title>
 
 </head>
@@ -200,7 +201,7 @@
                         <tr>
                             <th>herramienta</th>
                             <th>Unidad</th>
-                            <th>Numero Serie</th>
+                            <th>Codigo</th>
                             <th>Accion</th>
                         </tr>
                     </thead>
@@ -218,7 +219,8 @@
             <div class="modal-content">
                 <div class="modal-header">
 
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" id="salir" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
                 </div>
                 <div class="modal-body">
                     <h1>Estas seguro de dar de baja este material?</h1>
@@ -229,7 +231,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
                 </div>
             </div>
         </div>
@@ -281,6 +283,14 @@
                                             class="form-control" oninput="myFunction2(this.value)">
                                     </div>
                                 </div>
+                                <div class="mb-3" class="autocomplete">
+
+                                    <label for="exampleInputEmail1" class="form-label">Codigo</label><br>
+                                    <div class="autocomplete" style="widht:500px;">
+                                        <input required type="text" id="numero_serie" name="numero_serie"
+                                            class="form-control" oninput="myFunction3(this.value)">
+                                    </div>
+                                </div>
                                 <button type="button" id="agregar" data-bs-dismiss="modal" class="btn btn-1 bi ">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20"
                                         fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
@@ -303,7 +313,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
                 </div>
             </div>
         </div>
@@ -392,7 +402,9 @@
         button.addEventListener('click', (event) => {
             const nombre = localStorage.getItem('nombre');
             const unidad = localStorage.getItem('unidad');
-            addherramienta(nombre, unidad);
+            const numero_serie = localStorage.getItem('numero_serie');
+
+            addherramienta(nombre, unidad,numero_serie);
             table.ajax.reload();
 
         });
@@ -459,6 +471,22 @@
                         button.addEventListener('click', (event) => {
                             baja_herramienta(data.id);
                             table.row($(this).parents('tr')).remove().draw();
+                            const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+      Toast.fire({
+        icon: 'success',
+        title: 'se a dado de baja la herramienta ' + data.nombre ,
+      })    
+                         
                             $('#exampleModal').modal('hide');
 
                         });

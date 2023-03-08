@@ -150,30 +150,14 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
   </div>
     <div class="row">
     <div class="col-3">
-    
-
       <input id="user_id" name="user_id" type="hidden" value="{{$user_id}}">
       <input id="obra_id" name="obra" type="hidden" value="{{$obra_id}}">
-       
-      
-      cantidad:<br>
-      <input required id="cantidad"  name="cantidad"type="number" min="1" name="cantidad">
-  
-    </div>
-    <div class="autocomplete" style="width:300px;">
-  
-    <div class="col-6">Descripcion: <br>
-         <input required   id="myInput" name="descripcion" rows="2" cols="70" required> 
-        </div>
-  
-  
-    </div>
-    <div class="col-3">
       <div style="margin-top: 1rem;"></div>
       <button type="button" role="agregar" class="btn btn-1">
         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="25" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
         </svg>
+        
       </button>
     </div>
   
@@ -201,7 +185,6 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                     <thead>
                         <tr>
                           <th><b>Partida</b></th> 
-                          <th><b>Cantidad</b></th>
                           <th> <b>descripcion</b></th>
                           <th> <b>Accion</b></th>
                             
@@ -256,7 +239,10 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
  <!-- Para usar los botones -->
  <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
- <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+ <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
  <script src="{{ asset('peticiones/asignacionxusuario.js') }}"></script>
 
 
@@ -264,38 +250,21 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
 <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js"></script>
 <script>
-  let dt = null;
+ const herramientas = JSON.parse('<?php echo json_encode($herramientas_select); ?>');
+  let herramientas_array = [];
+  herramientas.forEach((element)=> {
+    let button ='<button type="button" role="add" class="btn btn-1"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="25" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/></svg></button>';
+
+    herramientas_array.push([element,button]);
+  });
+let dt = null;
+  let dt2 = null;
   $(document).on("click", "button[role='agregar']", function() {
-        let descripcion = document.getElementById("myInput").value;
-        let cantidad = document.getElementById("cantidad").value;
-        let obra_id = document.getElementById("obra_id").value;
-        let user_id = document.getElementById("user_id").value;
-        if (!cantidad){
-           return alert("no se asignado una cantidad");
-        }
-        if (!descripcion){
-            return alert("no se asignado una descripcion");
-        }
-        const object = {
-            obra_id:obra_id,
-            id:user_id,
-            descripcion:descripcion,
-            cantidad:cantidad,
-        };
-     const res =  fetch("http://127.0.0.1:8000/addherramienta_user", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(object),
-    }).then((res) => res.json())
-    .then((data) => {
-    
-    });
-    dt.ajax.reload();
+    $('#Herramientas').modal('show'); // abrir
+
     });
 $(document).ready(function () {
+
   const user_id = <?php echo $user_id; ?>;
   const obra_id = <?php echo $obra_id; ?>;
   cont = 1;
@@ -317,10 +286,7 @@ $(document).ready(function () {
                             return cont++;
                         }
                     },
-                    {
-                        data: "cantidad",
-
-                    },
+                   
                     {
                         data: "descripcion",
                     },
@@ -349,6 +315,29 @@ $(document).ready(function () {
 
                         button.addEventListener('click', (event) => {
                           delete_herramientas_user(data.id);
+                          const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+Toast.fire({
+  icon: 'success',
+  title: "se elimino " + data.descripcion,
+})
+        let obra_id = document.getElementById("obra_id").value;
+        let user_id = document.getElementById("user_id").value;
+        const object = {
+            obra_id:obra_id,
+            id:user_id,
+            descripcion:data[0],
+        };
                           dt.row($(this).parents('tr')).remove().draw();
 
                         });
@@ -372,121 +361,91 @@ $(document).ready(function () {
             ]            
         }            
     });
+  dt2 =  $("#myTable2").DataTable({
+    data: herramientas_array,
+        columns: [
+            { title: 'Herramientas' },
+            { title: 'Accion' },
+
+        ],
+        language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+        },
+        pageLength: 3,
+        initComplete: function() {
+                    $(document).on("click", "button[role='add']", function() {
+                      var data = dt2.row($(this).parents('tr')).data();
+                      const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+Toast.fire({
+  icon: 'success',
+  title: "se agrego " + data[0],
+})
+        let obra_id = document.getElementById("obra_id").value;
+        let user_id = document.getElementById("user_id").value;
+        const object = {
+            obra_id:obra_id,
+            id:user_id,
+            descripcion:data[0],
+        };
+const res =  fetch("http://127.0.0.1:8000/addherramienta_user", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(object),
+    });
+    dt.ajax.reload();
+dt2.row($(this).parents('tr')).remove().draw();
+
+                        
+                      // 
+                    });
+
+                },
+
+    });
 });
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
 
+
    
-    </html>
-    <script>
-    function autocomplete(inp, arr) {
-      /*the autocomplete function takes two arguments,
-      the text field element and an array of possible autocompleted values:*/
-      var currentFocus;
-      /*execute a function when someone writes in the text field:*/
-      inp.addEventListener("input", function(e) {
-          var a, b, i, val = this.value;
-          /*close any already open lists of autocompleted values*/
-          closeAllLists();
-          if (!val) { return false;}
-          currentFocus = -1;
-          /*create a DIV element that will contain the items (values):*/
-          a = document.createElement("DIV");
-          a.setAttribute("id", this.id + "autocomplete-list");
-          a.setAttribute("class", "autocomplete-items");
-          /*append the DIV element as a child of the autocomplete container:*/
-          this.parentNode.appendChild(a);
-          /*for each item in the array...*/
-          for (i = 0; i < arr.length; i++) {
-            /*check if the item starts with the same letters as the text field value:*/
-            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-              /*create a DIV element for each matching element:*/
-              b = document.createElement("DIV");
-              /*make the matching letters bold:*/
-              b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-              b.innerHTML += arr[i].substr(val.length);
-              /*insert a input field that will hold the current array item's value:*/
-              b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-              /*execute a function when someone clicks on the item value (DIV element):*/
-              b.addEventListener("click", function(e) {
-                  /*insert the value for the autocomplete text field:*/
-                  inp.value = this.getElementsByTagName("input")[0].value;
-                  /*close the list of autocompleted values,
-                  (or any other open lists of autocompleted values:*/
-                  closeAllLists();
-              });
-              a.appendChild(b);
-            }
-          }
-      });
-      /*execute a function presses a key on the keyboard:*/
-      inp.addEventListener("keydown", function(e) {
-          var x = document.getElementById(this.id + "autocomplete-list");
-          if (x) x = x.getElementsByTagName("div");
-          if (e.keyCode == 40) {
-            /*If the arrow DOWN key is pressed,
-            increase the currentFocus variable:*/
-            currentFocus++;
-            /*and and make the current item more visible:*/
-            addActive(x);
-          } else if (e.keyCode == 38) { //up
-            /*If the arrow UP key is pressed,
-            decrease the currentFocus variable:*/
-            currentFocus--;
-            /*and and make the current item more visible:*/
-            addActive(x);
-          } else if (e.keyCode == 13) {
-            /*If the ENTER key is pressed, prevent the form from being submitted,*/
-            e.preventDefault();
-            if (currentFocus > -1) {
-              /*and simulate a click on the "active" item:*/
-              if (x) x[currentFocus].click();
-            }
-          }
-      });
-      function addActive(x) {
-        /*a function to classify an item as "active":*/
-        if (!x) return false;
-        /*start by removing the "active" class on all items:*/
-        removeActive(x);
-        if (currentFocus >= x.length) currentFocus = 0;
-        if (currentFocus < 0) currentFocus = (x.length - 1);
-        /*add class "autocomplete-active":*/
-        x[currentFocus].classList.add("autocomplete-active");
-      }
-      function removeActive(x) {
-        /*a function to remove the "active" class from all autocomplete items:*/
-        for (var i = 0; i < x.length; i++) {
-          x[i].classList.remove("autocomplete-active");
-        }
-      }
-      function closeAllLists(elmnt) {
-        /*close all autocomplete lists in the document,
-        except the one passed as an argument:*/
-        var x = document.getElementsByClassName("autocomplete-items");
-        for (var i = 0; i < x.length; i++) {
-          if (elmnt != x[i] && elmnt != inp) {
-            x[i].parentNode.removeChild(x[i]);
-          }
-        }
-      }
-      /*execute a function when someone clicks in the document:*/
-      document.addEventListener("click", function (e) {
-          closeAllLists(e.target);
-      });
-    }
-    
-    /*An array containing all the country names in the world:*/
-    var countries = JSON.parse('<?php echo json_encode($herramientas_select); ?>');
-    console.log(countries);
-    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-    autocomplete(document.getElementById("myInput"), countries);
-    autocomplete(document.getElementById("myInput"), countries);
-     $(document).ready( function () {
-        $('#table_id').DataTable();
-    } );
-    </script>
-  </body>
+
+<!-- Modal -->
+<div class="modal fade modal-xl" id="Herramientas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table id="myTable2" class="table table-striped" style="width:100%">
+                 
+                </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
 </html>
+

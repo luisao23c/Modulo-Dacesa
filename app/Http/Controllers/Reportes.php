@@ -86,6 +86,7 @@ class Reportes extends Controller
   }
   public function vale_imprimir($vale,$user){
     $reporte_vale = DB::select("select obras.cliente, user_herramientas.cantidad,herramientas.unidad,herramientas.nombre FROM user_herramientas INNER JOIN herramientas on herramientas.id = user_herramientas.herramienta INNER JOIN obras on obras.id = user_herramientas.obra WHERE user_herramientas.vale  = ?",[$vale]);
+
     foreach ($reporte_vale as $key => $value) {
       $cliente = $value->cliente;
     }

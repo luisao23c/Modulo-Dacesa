@@ -119,7 +119,7 @@ class Users extends Controller
            $obra_id = $value->id;
            $obra =$value->obra;
          }
-         $herramienta_input = DB::select('select herramientas.nombre FROM herramientas WHERE herramientas.estado =1;');
+         $herramienta_input = DB::select('select * FROM herramientas t1 WHERE NOT EXISTS (SELECT herramienta FROM user_herramientas t2 WHERE t2.herramienta = t1.id) and estado =1;');
          $herramientas_select =  array();
          foreach ($herramienta_input as $key => $value) {
           array_push($herramientas_select, $value->nombre);
@@ -129,7 +129,7 @@ class Users extends Controller
         return view('solicitud.asignacionxusuario')->with(compact('herramientas_select'))->with(compact('obra_id'))->with(compact('user'))->with(compact('herramientas'))->with(compact('user_id'))->with(compact('sup'))->with(compact('emp'))->with(compact('obra'))->with(compact('cliente'))->with(compact('name'));
       }
       public function herramientas_asignadas_user($user_id = null,$obra_id = null){
-        $herramientas_asignadas = DB::select('select user_herramientas.id,user_herramientas.cantidad,user_herramientas.herramienta,user_herramientas.descripcion,herramientas.numero_serie from user_herramientas left join herramientas on user_herramientas.herramienta = herramientas.id  WHERE user_herramientas.user = ? and  user_herramientas.obra = ? and user_herramientas.cantidad is not null and user_herramientas.herramienta is null', [$user_id,$obra_id]);
+        $herramientas_asignadas = DB::select('select user_herramientas.id,user_herramientas.herramienta,user_herramientas.descripcion,herramientas.numero_serie from user_herramientas left join herramientas on user_herramientas.herramienta = herramientas.id  WHERE user_herramientas.user = ? and  user_herramientas.obra = ? and user_herramientas.cantidad is not null and user_herramientas.herramienta is null', [$user_id,$obra_id]);
         return json_encode($herramientas_asignadas);
       }
       public function vistadeusuario(Request $request){

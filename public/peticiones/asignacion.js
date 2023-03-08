@@ -12,29 +12,17 @@ function myFunction(val) {
     const herramienta = document.getElementById("herramienta" + partida).value;
     const user = document.getElementById("user" + partida).value;
     const ide = document.getElementById("id" + partida).value;
-    const cantidad = document.getElementById("cantidad" + partida).value;
-    const faltan = document.getElementById("faltan" + partida).value;
     const vale = num_vale;
 
-    console.log(faltan + "-- " + cantidad );
-    const f = parseInt(faltan);
-    const c = parseInt(cantidad);
     
-    if(f > c) {
-      window.location.reload();
-      alert("no se puede dar mas material del pedido");
-    }
     
     const object = {
         id: ide,
         user: user,
-        cantidad: cantidad,
-        faltan: faltan,
         herramienta: herramienta,
         vale: vale,
 
     };
-
     const res = await fetch("asignar_herramienta", {
         method: "POST",
         mode: "cors",
@@ -43,9 +31,7 @@ function myFunction(val) {
         },
         body: JSON.stringify(object),
     });
-    if(c > f){
-      localStorage.setItem("recargar",true);
-    }
+   
 }
 
 

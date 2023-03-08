@@ -133,7 +133,6 @@
 
                             <th>Articulo</th>
                             <th> Unidad</th>
-                            <th> cantidad</th>
                             <th> No. serie</th>
                             <th> Devolucion</th>
 
@@ -175,7 +174,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
                 </div>
             </div>
         </div>
@@ -198,6 +197,7 @@
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="{{ asset('peticiones/devolucion.js') }}"></script>
     <!-- Para los estilos en Excel     -->
@@ -256,9 +256,7 @@
                         {
                             "data": "unidad"
                         },
-                        {
-                            "data": "cantidad"
-                        },
+                      
                         {
                             "data": "numero_serie"
                         },
@@ -304,6 +302,23 @@
                     const button = document.getElementById('eliminar');
 
                     button.addEventListener('click', (event) => {
+                        const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+Toast.fire({
+  icon: 'success',
+  title: "se a devuelto la herramienta " + data.nombre
+})
+
                         table.row($(this).parents('tr')).remove().draw();
                         delete_herramientas_user(data.id_user, data.id, data.id_herramienta);
                         localStorage.clear();

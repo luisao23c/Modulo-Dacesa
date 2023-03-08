@@ -220,7 +220,6 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
                           <th>No.Serie</th>
                           <th> Ubicacion </th>
                           <th>Unidad</th>
-                          <th>cantidad</th>
                           <th>Fecha de prestamo</th>
                           <th>Dias desde el prestamo</th>
                   
@@ -282,10 +281,8 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
         </form>
       <td>{{$items->unidad}}</td>
       @if ($items->asignados>0)
-      <td>{{$items->asignados}}</td>
       @endif
       @if ($items->asignados==null)
-      <td>{{$items->cantidad}}</td>
       @endif
       <td>{{$items->created_at}}</td>
       <td>{{$transcurso_dias}}</td>
@@ -336,6 +333,7 @@ table.dataTable thead {background-color:#ff4081;color: azure;}
 <script src="https://cdn.datatables.net/fixedcolumns/4.2.1/js/dataTables.fixedColumns.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.colVis.min.js"></script>
+<script src="{{ asset('spanish.js') }}"></script>
 
 
 <script src="https://cdn.datatables.net/searchpanes/2.1.0/js/dataTables.searchPanes.min.js"></script>
@@ -367,7 +365,6 @@ $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
    var mindias = parseInt($('#mindias').val(), 10);
    var maxdias = parseInt($('#maxdias').val(), 10);
    var Dias = parseFloat(data[7]) || 0; // use data for the age column
-console.log(mindias);
    if (
        (isNaN(mindias) && isNaN(maxdias)) ||
        (isNaN(mindias) && Dias <= maxdias) ||
@@ -397,9 +394,15 @@ console.log(mindias);
     orderCellsTop: true,
       fixedHeader: true,
       select: true,
-
+     
       language: {
-          "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+          "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+          searchPanes: {
+                clearMessage: 'Limpiar Filtros',
+                collapseMessage: "Colapasar",
+                showMessage:"Ver Filtros",
+                title:"Filtros Activos",
+            }
       },
       pageLength: 4,
       searchPanes: {
@@ -477,6 +480,7 @@ console.log(mindias);
       
         {
                         searchPanes: {
+                        
                             options: [{
                                     label: ' menores a 30 dias',
                                     value: function(rowData, rowIdx) {
@@ -507,11 +511,14 @@ console.log(mindias);
   });
 
  
+  
+
+ 
 });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
-    
+
 </body>
 </html>
