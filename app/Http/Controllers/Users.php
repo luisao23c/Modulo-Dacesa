@@ -119,7 +119,7 @@ class Users extends Controller
            $obra_id = $value->id;
            $obra =$value->obra;
          }
-         $herramienta_input = DB::select('select * FROM herramientas t1 WHERE NOT EXISTS (SELECT herramienta FROM user_herramientas t2 WHERE t2.herramienta = t1.id) and estado =1;');
+         $herramienta_input = DB::select('select * FROM herramientas t1 WHERE NOT EXISTS (SELECT herramienta FROM user_herramientas t2 WHERE t2.herramienta = t1.id or t1.nombre = t2.descripcion) and estado =1;');
          $herramientas_select =  array();
          foreach ($herramienta_input as $key => $value) {
           array_push($herramientas_select, $value->nombre);

@@ -37,6 +37,7 @@ class CrudHerramientas extends Controller
     $asignacion_herramienta->descripcion = $request->descripcion;
 
     $asignacion_herramienta->cantidad =1;
+    
     $asignacion_herramienta->save();
     
   }
@@ -49,9 +50,13 @@ class CrudHerramientas extends Controller
 
 
   public function addherramienta(Request $request)
-  {
+  { $id= 0;
+    $herramientas = DB::select("select MAX(id) AS id FROM herramientas;");
+    foreach ($herramientas as $key => $value) {
+      $id = $value->id;
+    }
     $herramienta = new herramientas();
-    $herramienta->nombre = $request->nombre;
+    $herramienta->nombre = $request->nombre.$id;
     $herramienta->unidad = $request->unidad;
     $herramienta->numero_serie = $request->	numero_serie;
     $herramienta->estado = 1;
@@ -87,10 +92,18 @@ class CrudHerramientas extends Controller
       $herramientas->descripcion = NULL;
     }
     $herramientas->observacion = $request->observacion;
+    if($request->observacion!= "")
+    {
+      $herramienta->estado = 0;
+      $herramienta->update();
+    }
+    else{
+      $herramienta->estado = 1;
+      $herramienta->update();
+    }
     $herramientas->reporte = 1;
     $herramientas->update();
-    $herramienta->estado = 1;
-    $herramienta->update();
+   
   }
   public function eliminar_peticion_herramienta(Request $request)
   {

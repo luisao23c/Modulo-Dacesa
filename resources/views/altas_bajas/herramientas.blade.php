@@ -675,7 +675,7 @@
         }
 
         /*An array containing all the country names in the world:*/
-        var countries = JSON.parse('<?php echo json_encode($herramientas_select); ?>');
+        let countries = <?php echo json_encode($herramientas_select)?>;
         console.log(countries);
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
         autocomplete(document.getElementById("myInput"), countries);
